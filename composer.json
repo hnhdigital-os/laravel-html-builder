@@ -17,6 +17,11 @@
         "phpmd/phpmd" : "@stable"
     },
     "support": {
-        "issues": "https://github.com/bluora/php-html-generator/issues"
+        "issues": "https://github.com/bluora/laravel-html-builder/issues"
+    },
+    "autoload": {
+        "psr-4": {
+            "LaravelHtmlBuilder\\": "src/"
+        }
     }
 }
