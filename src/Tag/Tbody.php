@@ -7,5 +7,5 @@ use LaravelHtmlBuilder\Tag;
 class Tbody extends Tag
 {
     protected $tag = 'tbody';
-    protected $allowed_tags = ['td'];
+    protected $allowed_tags = ['tr'];
 }

@@ -2,19 +2,53 @@
 
 namespace LaravelHtmlBuilder;
 
-use HtmlGenerator\HtmlTag;
+use HtmlGenerator\Markup;
 
-class Html extends HtmlTag
+class Html extends Markup
 {
     protected $autocloseTagsList = [
         'img', 'br', 'hr', 'input', 'area', 'link', 'meta', 'param'
     ];
+    protected $tag = 'tag';
+
+    /**
+     * Add an action link.
+     *
+     * @return Html instance
+     */
+    public function action($text, $controller_action, $parameters = [])
+    {
+        return $this->add('a')->text($text)
+            ->href(action($controller_action, $parameters));
+    }
+
+    /**
+     * Add an action link (static).
+     *
+     * @return Html instance
+     */
+    public static function actionLink($text, $controller_action, $parameters = [])
+    {
+        return self::createElement('a')->text($text)
+            ->href(action($controller_action, $parameters));
+    }
+
+    /**
+     * Add an array of attributes
+     *
+     * @param array $attribute_list
+     * @return Html instance
+     */
+    public function addAttributes($attribute_list)
+    {
+
+    }
 
     /**
      * Add a class to classList.
      *
      * @param string $value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function addClass($value)
     {
@@ -41,7 +75,7 @@ class Html extends HtmlTag
      * Shortcut to set('for', $value).
      *
      * @param string $value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function addFor($value)
     {
@@ -51,7 +85,7 @@ class Html extends HtmlTag
     /**
      * Shortcut to set('autocomplete', $value). Only works with FORM, INPUT tags.
      *
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function autocomplete()
     {
@@ -64,7 +98,7 @@ class Html extends HtmlTag
     /**
      * Shortcut to set('autofocus', $value). Only works with BUTTON, INPUT, KEYGEN, SELECT, TEXTAREA tags.
      *
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function autofocus()
     {
@@ -79,7 +113,7 @@ class Html extends HtmlTag
      *
      * @param boolean $value
      * @param boolean $check_value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function checked($value = true, $check_value = true)
     {
@@ -90,11 +124,37 @@ class Html extends HtmlTag
     }
 
     /**
+     * Create a new tag.
+     *
+     * @param string $tag
+     * @param mixed $attributes
+     * @return Markup instance
+     */
+    public static function createElement($tag = '', $attributes = [])
+    {
+        $tag_object = parent::createElement($tag);
+        $tag_object->setTag($tag);
+        if (!is_array($attributes) && strlen($attributes) > 0) {
+            $tag_object->text($attributes);
+        } elseif (is_array($attributes)) {
+            foreach ($attributes as $name => $value) {
+                if (method_exists($tag_object, $name)) {
+                    if (!is_array($value)) {
+                        $value = [$value];
+                    }
+                    call_user_func_array([$tag_object, $name], $value);
+                }
+            }
+        }
+        return $tag_object;
+    }
+
+    /**
      * Shortcut to set('data-$name', $value).
      *
      * @param string $name
      * @param string $value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function data($name, $value)
     {
@@ -106,7 +166,7 @@ class Html extends HtmlTag
      *
      * @param boolean $value
      * @param boolean $check_value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function disable($value = true, $check_value = true)
     {
@@ -117,12 +177,33 @@ class Html extends HtmlTag
     }
 
     /**
+     * Get the tag name.
+     *
+     * @return string
+     */
+    public function getTag()
+    {
+        return $this->tag;
+    }
+
+    /**
+     * Shortcut to set('height', $value).
+     *
+     * @param string $value
+     * @return Html instance
+     */
+    public function height($value)
+    {
+        return parent::attr('height', $value);
+    }
+
+    /**
      * Shortcut to set('href', $value). Only works with A tags.
      *
      * @param string $value
-     * @return HtmlTag instance
+     * @return Html instance
      */
-    public function href($value)
+    public function href($value = '')
     {
         if ($this->tag === 'a') {
             return parent::attr('href', $value);
@@ -134,7 +215,7 @@ class Html extends HtmlTag
      * Shortcut to set('id', $value).
      *
      * @param string $value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function id($value)
     {
@@ -145,7 +226,7 @@ class Html extends HtmlTag
      * Shortcut to for creating a label
      *
      * @param string $value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function label($text)
     {
@@ -158,10 +239,32 @@ class Html extends HtmlTag
     }
 
     /**
+     * Add an route link (static).
+     *
+     * @return Html instance
+     */
+    public static function urlLink($text, $url, $parameters  = [], $secure = null)
+    {
+        return $this->createElement('a')->text($text)
+            ->href(url($route, $parameters, $secure ));
+    }
+
+    /**
+     * Add an route link
+     *
+     * @return Html instance
+     */
+    public function url($text, $url, $parameters  = [], $secure = null)
+    {
+        return $this->add('a')->text($text)
+            ->href(url($route, $parameters, $secure ));
+    }
+
+    /**
      * Shortcut to set('name', $value).
      *
      * @param string $value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function name($value)
     {
@@ -173,7 +276,7 @@ class Html extends HtmlTag
      *
      * @param string $name
      * @param string $value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function on($name, $value)
     {
@@ -184,7 +287,7 @@ class Html extends HtmlTag
      * Shortcut to set('pattern', $value).
      *
      * @param string $value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function pattern($value)
     {
@@ -195,7 +298,7 @@ class Html extends HtmlTag
      * Shortcut to set('placeholder', $value).
      *
      * @param string $value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function placeholder($value)
     {
@@ -206,7 +309,7 @@ class Html extends HtmlTag
      * Remove a class from classList.
      *
      * @param string $value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function removeClass($value)
     {
@@ -221,7 +324,7 @@ class Html extends HtmlTag
      *
      * @param boolean $required
      * @param boolean $required_value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function required($required = true, $required_value = true)
     {
@@ -235,7 +338,7 @@ class Html extends HtmlTag
      * Shortcut to set('rows', $value).
      *
      * @param integer $rows
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function rows($rows)
     {
@@ -243,6 +346,28 @@ class Html extends HtmlTag
             return parent::attr('rows', $rows);
         }
         return $this;
+    }
+
+    /**
+     * Add an route link.
+     *
+     * @return Html instance
+     */
+    public function route($text, $route, $parameters = [])
+    {
+        return $this->add('a')->text($text)
+            ->href(route($route, $parameters));
+    }
+
+    /**
+     * Add an route link (static).
+     *
+     * @return Html instance
+     */
+    public static function routeLink($text, $route, $parameters = [])
+    {
+        return self::createElement('a')->text($text)
+            ->href(route($route, $parameters));
     }
 
     /**
@@ -262,10 +387,21 @@ class Html extends HtmlTag
     }
 
     /**
+     * Set the tag name.
+     *
+     * @return string
+     */
+    public function setTag($tag)
+    {
+        $this->tag = $tag;
+        return $this;
+    }
+
+    /**
      * Shortcut to set('src', $value).
      *
      * @param string $value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function src($value)
     {
@@ -279,7 +415,7 @@ class Html extends HtmlTag
      * Shortcut to set('style', $value).
      *
      * @param string $value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function style($value)
     {
@@ -305,7 +441,7 @@ class Html extends HtmlTag
      * Shortcut to set('title', $value).
      *
      * @param string $value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function title($value)
     {
@@ -316,7 +452,7 @@ class Html extends HtmlTag
      * Shortcut to set('type', $value).
      *
      * @param string $value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function type($value)
     {
@@ -329,14 +465,51 @@ class Html extends HtmlTag
     }
 
     /**
+     * Shortcut to set('width', $value).
+     *
+     * @param string $value
+     * @return Html instance
+     */
+    public function width($value)
+    {
+        return parent::attr('width', $value);
+    }
+
+    /**
      * Shortcut to set('value', $value).
      *
      * @param string $value
-     * @return HtmlTag instance
+     * @return Html instance
      */
     public function value($value)
     {
-        return parent::attr('value', $value);
+        return parent::attr('value', htmlspecialchars($value));
+    }
+
+    /**
+     * Add a new element
+     *
+     * @param  string $tag
+     * @param  array $arguments
+     * @return Html instance
+     */
+    public function __call($tag, $arguments)
+    {
+        array_unshift($arguments, $tag);
+        return call_user_func_array([$this, 'addElement'], $arguments);
+    }
+
+    /**
+     * Create a new element
+     *
+     * @param  string $tag
+     * @param  array $arguments
+     * @return Html instance
+     */
+    public static function __callStatic($tag, $arguments)
+    {
+        array_unshift($arguments, $tag);
+        return call_user_func_array(['self', 'createElement'], $arguments);
     }
 
 }
