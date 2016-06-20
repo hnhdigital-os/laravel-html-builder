@@ -318,7 +318,7 @@ class Tag
         self::checkBuildOptions($options);
 
         if (in_array($tag_object->getTag(), self::$special_tags)) {
-            $html .= $pad.(string)$tag_object;
+            $array[] = [(string)$tag_object];
         } elseif (!isset($options['ignore_tags']) || !in_array($tag_object->getTag(), $options['ignore_tags'])) {
             $array[] = [
                 $tag_object->getTag(),
@@ -335,7 +335,10 @@ class Tag
             } else {
                 $current_parent = count($array)-1;
                 foreach ($tag_object->getChildNodes() as $child_tag_object) {
-                    self::buildArray($array[count($array)-1][3], $child_tag_object);
+                    $current_position = count($array)-1;
+                    if (isset($array[$current_position][3]) && !is_null($array[$current_position][3])) {
+                        self::buildArray($array[count($array)-1][3], $child_tag_object);
+                    }
                 }
             }
         }

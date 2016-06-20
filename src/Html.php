@@ -29,7 +29,7 @@ class Html extends Markup
      */
     public static function actionLink($text, $controller_action, $parameters = [])
     {
-        return self::createElement('a')->text($text)
+        return self::addElement('a')->text($text)
             ->href(action($controller_action, $parameters));
     }
 
@@ -57,16 +57,19 @@ class Html extends Markup
             $value = $paramaters;
         }
         if (!is_array($value)) {
-            $value = [$value];
+            $value = explode(' ', $value);
         }
         if (!isset($this->attributeList['class']) || is_null($this->attributeList['class'])) {
-            $this->attributeList['class'] = array();
+            $this->attributeList['class'] = [];
         }
         foreach ($value as $class_name) {
-            if (function_exists('hookAddClassHtmlTag')) {
-                hookAddClassHtmlTag($class_name);
+            $class_name = trim($class_name);
+            if (!empty($class_name)) {
+                if (function_exists('hookAddClassHtmlTag')) {
+                    hookAddClassHtmlTag($class_name);
+                }
+                $this->attributeList['class'][] = $class_name;
             }
-            $this->attributeList['class'][] = $class_name;
         }
         return $this;
     }
@@ -80,6 +83,17 @@ class Html extends Markup
     public function addFor($value)
     {
         return parent::attr('for', $value);
+    }
+
+    /**
+     * Create options
+     */
+    public function addOptionsArray($data, $value, $name)
+    {
+        foreach ($data as $data_option) {
+            $this->addElement('option')->value($data_option[$value])->text($data_option[$name]);
+        }
+        return $this;
     }
 
     /**
@@ -127,16 +141,20 @@ class Html extends Markup
      * Create a new tag.
      *
      * @param string $tag
-     * @param mixed $attributes
+     * @param mixed $attributes1
+     * @param mixed $attributes2
      * @return Markup instance
      */
-    public static function createElement($tag = '', $attributes = [])
+    public static function createElement($tag = '', $attributes1 = [], $attributes2 = [])
     {
         $tag_object = parent::createElement($tag);
         $tag_object->setTag($tag);
-        if (!is_array($attributes) && strlen($attributes) > 0) {
-            $tag_object->text($attributes);
-        } elseif (is_array($attributes)) {
+        $attributes = $attributes1;
+        if (!is_array($attributes1) && strlen($attributes1) > 0) {
+            $tag_object->text($attributes1);
+            $attributes = $attributes2;
+        }
+        if (is_array($attributes)) {
             foreach ($attributes as $name => $value) {
                 if (method_exists($tag_object, $name)) {
                     if (!is_array($value)) {
