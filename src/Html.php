@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelHtmlBuilder;
+namespace Bluora\\LaravelHtmlBuilder;
 
 use HtmlGenerator\Markup;
 
@@ -88,10 +88,16 @@ class Html extends Markup
     /**
      * Create options
      */
-    public function addOptionsArray($data, $value, $name)
+    public function addOptionsArray($data, $value, $name, $selected_value = [])
     {
+        if (!is_array($selected_value)) {
+            $selected_value = [$selected_value];
+        }
         foreach ($data as $data_option) {
-            $this->addElement('option')->value($data_option[$value])->text($data_option[$name]);
+            $option = $this->addElement('option')->value($data_option[$value])->text($data_option[$name]);
+            if (in_array($data_option[$value], $selected_value)) {
+                $option->selected('selected');
+            }
         }
         return $this;
     }
@@ -324,6 +330,17 @@ class Html extends Markup
     }
 
     /**
+     * Shortcut to set('multiple', 'multiple').
+     *
+     * @param string $value
+     * @return Html instance
+     */
+    public function multiple()
+    {
+        return parent::attr('multiple', 'multiple');
+    }
+
+    /**
      * Remove a class from classList.
      *
      * @param string $value
@@ -375,6 +392,17 @@ class Html extends Markup
     {
         return $this->add('a')->text($text)
             ->href(route($route, $parameters));
+    }
+
+    /**
+     * Shortcut to set('selected', 'selected').
+     *
+     * @param string $value
+     * @return Html instance
+     */
+    public function selected()
+    {
+        return parent::attr('selected', 'selected');
     }
 
     /**

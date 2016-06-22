@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelHtmlBuilder;
+namespace Bluora\LaravelHtmlBuilder;
 
 use Exception;
-use LaravelHtmlBuilder\Html;
+use Bluora\LaravelHtmlBuilder\Html;
 
 class Tag
 {
@@ -38,7 +38,7 @@ class Tag
      * @param  string $tag
      * @param  array  $attributes
      * @param  string $text
-     * @return LaravelHtmlBuilder\Tag
+     * @return Bluora\LaravelHtmlBuilder\Tag
      */
     public static function create($tag, $attributes = [], $text = '')
     {
@@ -51,7 +51,7 @@ class Tag
      * @param string $tag
      * @param array  $attributes
      * @param string $text
-     * @return LaravelHtmlBuilder\Tag
+     * @return Bluora\LaravelHtmlBuilder\Tag
      */
     public function add($tag, $attributes = [], $text = '')
     {
@@ -65,7 +65,7 @@ class Tag
                 $this->child_nodes[] = &$tag_object;
                 return $tag_object;
             } else {
-                $class_name = '\\LaravelHtmlBuilder\\Tag\\'.ucfirst($tag);
+                $class_name = 'Bluora\\LaravelHtmlBuilder\\Tag\\'.ucfirst($tag);
                 if (class_exists($class_name)) {
                     $tag_object = new $class_name($attributes, $text);
                     self::$tag_registry[] = &$tag_object;
@@ -84,7 +84,7 @@ class Tag
     /**
      * Get the tag parent node.
      *
-     * @return LaravelHtmlBuilder\Tag
+     * @return Bluora\LaravelHtmlBuilder\Tag
      */
     public function getParent()
     {
@@ -99,7 +99,7 @@ class Tag
      * Set the parent of this tag.
      *
      * @param LaravelHtmlBuilder\Tag $tag_object
-     * @return LaravelHtmlBuilder\Tag
+     * @return Bluora\LaravelHtmlBuilder\Tag
      */
     public function setParent(&$tag_object)
     {
@@ -121,7 +121,7 @@ class Tag
      * Set the text for this tag.
      *
      * @param  string $value
-     * @return LaravelHtmlBuilder\Tag
+     * @return Bluora\LaravelHtmlBuilder\Tag
      */
     public function setText($value)
     {
@@ -145,7 +145,7 @@ class Tag
      * Set one or many attributes.
      *
      * @param  array ...$attributes
-     * @return LaravelHtmlBuilder\Tag
+     * @return Bluora\LaravelHtmlBuilder\Tag
      */
     public function setAttributes()
     {
@@ -174,7 +174,7 @@ class Tag
      *
      * @param string $name
      * @param string $value
-     * @return LaravelHtmlBuilder\Tag
+     * @return Bluora\LaravelHtmlBuilder\Tag
      */
     public function setAttribute($name, $value)
     {
@@ -464,7 +464,7 @@ class Tag
      *
      * @param  string $tag
      * @param  array $arguments
-     * @return LaravelHtmlBuilder\Tag $tag_object
+     * @return Bluora\LaravelHtmlBuilder\Tag $tag_object
      */
     public function __call($tag, $arguments)
     {
@@ -480,7 +480,7 @@ class Tag
      *
      * @param  string $tag
      * @param  array $arguments
-     * @return LaravelHtmlBuilder\Tag $tag_object
+     * @return Bluora\LaravelHtmlBuilder\Tag $tag_object
      */
     public static function __callStatic($tag, $arguments)
     {

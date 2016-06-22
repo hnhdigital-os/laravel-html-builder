@@ -1,8 +1,8 @@
 <?php
 
-namespace LaravelHtmlBuilder\Tag;
+namespace Bluora\LaravelHtmlBuilder\Tag;
 
-use LaravelHtmlBuilder\Tag;
+use Bluora\LaravelHtmlBuilder\Tag;
 
 class Select extends Tag
 {
