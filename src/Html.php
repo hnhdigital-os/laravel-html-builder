@@ -1,6 +1,6 @@
 <?php
 
-namespace Bluora\\LaravelHtmlBuilder;
+namespace Bluora\LaravelHtmlBuilder;
 
 use HtmlGenerator\Markup;
 
@@ -527,7 +527,7 @@ class Html extends Markup
      * @param string $value
      * @return Html instance
      */
-    public function value($value)
+    public function value($value = '')
     {
         return parent::attr('value', htmlspecialchars($value));
     }
