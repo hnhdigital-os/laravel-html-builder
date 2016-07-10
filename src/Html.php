@@ -370,6 +370,17 @@ class Html extends Markup
     }
 
     /**
+     * Shortcut to set('role', $value).
+     *
+     * @param string $value
+     * @return Html instance
+     */
+    public function role($value)
+    {
+        return parent::attr('role', $value);
+    }
+
+    /**
      * Shortcut to set('rows', $value).
      *
      * @param integer $rows
@@ -466,6 +477,17 @@ class Html extends Markup
     public function style($value)
     {
         return parent::attr('style', $value);
+    }
+
+    /**
+     * Shortcut to set('target', $value).
+     *
+     * @param string $value
+     * @return Html instance
+     */
+    public function target($value)
+    {
+        return parent::attr('target', $value);
     }
 
     /**
