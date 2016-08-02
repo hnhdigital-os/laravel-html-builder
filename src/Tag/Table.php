@@ -7,5 +7,5 @@ use Bluora\LaravelHtmlBuilder\Tag;
 class Table extends Tag
 {
     protected $tag = 'table';
-    protected $allowed_tags = ['tbody', 'tr'];
+    protected $allowed_tags = ['tbody', 'thead', 'tr'];
 }
