@@ -34,6 +34,17 @@ class Html extends Markup
     }
 
     /**
+     * Shortcut to set('alt', $value).
+     *
+     * @param string $value
+     * @return Html instance
+     */
+    public function alt($value)
+    {
+        return parent::attr('alt', e($value));
+    }
+
+    /**
      * Add an array of attributes
      *
      * @param array $attribute_list
@@ -88,18 +99,38 @@ class Html extends Markup
     /**
      * Create options
      */
-    public function addOptionsArray($data, $value, $name, $selected_value = [])
+    public function addOptionsArray($data, $data_value, $data_name, $selected_value = [])
     {
-        if (!is_array($selected_value)) {
+        if (!empty($selected_value) && !is_array($selected_value)) {
             $selected_value = [$selected_value];
         }
-        foreach ($data as $data_option) {
+        foreach ($data as $key => $data_option) {
+            if ($data_value === false && $data_name === false) {
+                $value = 0;
+                $name = 1;
+                $data_option = [$key, $data_option];
+            } else {
+                $value = $data_value;
+                $name = $data_name;
+            }
             $option = $this->addElement('option')->value($data_option[$value])->text($data_option[$name]);
-            if (in_array($data_option[$value], $selected_value)) {
+            if (!empty($selected_value) && in_array($data_option[$value], $selected_value)) {
                 $option->selected('selected');
             }
         }
         return $this;
+    }
+
+    /**
+     * Shortcut to set('aria-$name', $value).
+     *
+     * @param string $name
+     * @param string $value
+     * @return Html instance
+     */
+    public function aria($name, $value)
+    {
+        return parent::attr('aria-'.$name, $value);
     }
 
     /**
@@ -201,6 +232,43 @@ class Html extends Markup
     }
 
     /**
+     * Shortcut to set('form', $value).
+     *
+     * @param string $value
+     * @return Html instance
+     */
+    public function form($value)
+    {
+        return parent::attr('form', $value);
+    }
+
+    /**
+     * Shortcut to creating a FontAwesome item (static)
+     *
+     * @param string $value
+     * @return Html instance
+     */
+    public static function icon($icon, $size = 0, $tag = 'i')
+    {
+        $icon = ($icon[0] === '-') ? substr($icon, 1) : 'fa-'.$icon;
+        $size = ($size > 0) ? ' fa-'.$size : '';
+        $fa = Html::$tag()->addClass('fa '.$icon.$size)->aria('hidden', 'true');
+        return $fa;
+    }
+
+    /**
+     * Shortcut to creating a FontAwesome item
+     *
+     * @param string $value
+     * @return Html instance
+     */
+    public function addicon($icon, $tag = 'i')
+    {
+        $icon = static::icon($icon, $tag);
+        return $this->addElement($icon);
+    }
+
+    /**
      * Get the tag name.
      *
      * @return string
@@ -208,6 +276,18 @@ class Html extends Markup
     public function getTag()
     {
         return $this->tag;
+    }
+
+    /**
+     * Shortcut to createElement('h'.$size, $text).
+     *
+     * @param integer $size
+     * @param string $text
+     * @return Html instance
+     */
+    public static function h($size, $text)
+    {
+        return Html::createElement('h'.$size, $text);
     }
 
     /**
@@ -219,6 +299,21 @@ class Html extends Markup
     public function height($value)
     {
         return parent::attr('height', $value);
+    }
+
+    /**
+     * Shortcut to set('height', $value).
+     *
+     * @param string $value
+     * @return Html instance
+     */
+    public function hidden()
+    {
+        if (!isset($this->attributeList['style'])) {
+            $this->attributeList['style'] = '';
+        }
+        $this->attributeList['style'] .= 'display:hidden;';
+        return $this;
     }
 
     /**
@@ -247,18 +342,32 @@ class Html extends Markup
     }
 
     /**
-     * Shortcut to for creating a label
+     * Shortcut to set('href', 'javascript:void(0)').
+     *
+     * @param string $value
+     * @return Html instance
+     */
+    public function scriptLink($value = 0)
+    {
+        $value = ($value !== 0) ? '\''.urlencode(htmlspecialchars($value)).'\'' : $value;
+        return $this->set('href', 'javascript:void();');
+    }
+
+    /**
+     * Shortcut for creating a label
      *
      * @param string $value
      * @return Html instance
      */
     public function label($text)
     {
-        $id = $this->attributeList['id'];
+        $label = Html::createElement('label');
 
-        return Html::createElement('label')
-            ->refer($id)
-            ->text($this)
+        if (isset($this->attributeList['id'])) {
+            $label->refer($this->attributeList['id']);
+        }
+
+        return $label->text($this)
             ->text($text);
     }
 
@@ -270,7 +379,7 @@ class Html extends Markup
     public static function urlLink($text, $url, $parameters  = [], $secure = null)
     {
         return $this->createElement('a')->text($text)
-            ->href(url($route, $parameters, $secure ));
+            ->href(url($url, $parameters, $secure ));
     }
 
     /**
@@ -281,7 +390,7 @@ class Html extends Markup
     public function url($text, $url, $parameters  = [], $secure = null)
     {
         return $this->add('a')->text($text)
-            ->href(url($route, $parameters, $secure ));
+            ->href(url($url, $parameters, $secure));
     }
 
     /**
@@ -296,6 +405,20 @@ class Html extends Markup
     }
 
     /**
+     * Shortcut to set('target', '_blank').
+     *
+     * @param string $value
+     * @return Html instance
+     */
+    public function openNew()
+    {
+        if ($this->tag === 'a') {
+            return parent::attr('target', '_blank');
+        }
+        return $this;
+    }
+
+    /**
      * Shortcut to set('on...', $value).
      *
      * @param string $name
@@ -305,6 +428,21 @@ class Html extends Markup
     public function on($name, $value)
     {
         return parent::attr('on'.$name, $value);
+    }
+
+    /**
+     * Shortcut to set('style', 'opacity: xx').
+     *
+     * @param string $value
+     * @return Html instance
+     */
+    public function opacity($value)
+    {
+        if (!isset($this->attributeList['style'])) {
+            $this->attributeList['style'] = '';
+        }
+        $this->attributeList['style'] .= 'opacity: '.round($value/100, 2).';';
+        return $this;
     }
 
     /**
@@ -327,6 +465,21 @@ class Html extends Markup
     public function placeholder($value)
     {
         return parent::attr('placeholder', $value);
+    }
+
+    /**
+     * Prepare key => value options array for select-options
+     *
+     * @param array $options
+     * @return Html instance
+     */
+    public static function prepareOptions($options, $blank_first_option = false)
+    {
+        $options = array_map(function($key, $value) {
+            return [$key, $value];
+        }, array_keys($options), array_values($options));
+        if ($blank_first_option) array_unshift($options, ['', '']);
+        return $options;
     }
 
     /**
@@ -364,6 +517,8 @@ class Html extends Markup
     public function required($required = true, $required_value = true)
     {
         if ($required == $required_value) {
+            $this->addClass('required');
+            $this->aria('required', 'true');
             return parent::attr('required', 'required');
         }
         return $this;
@@ -406,8 +561,34 @@ class Html extends Markup
     }
 
     /**
-     * Shortcut to set('selected', 'selected').
+     * Add an route href.
      *
+     * @return Html instance
+     */
+    public function routeHref($route, $parameters = [])
+    {
+        return $this->href(route($route, $parameters));
+    }
+
+    /**
+     * Shortcut to set('selected', 'selected').
+     *s
+     * @param string $value
+     * @return Html instance
+     */
+    public function rtl($is_rtl = false)
+    {
+        if ($is_rtl) {
+            parent::attr('dir', 'rtl');
+        } else {
+            parent::attr('dir', 'ltr');
+        }
+        return $this;
+    }
+
+    /**
+     * Shortcut to set('selected', 'selected').
+     *s
      * @param string $value
      * @return Html instance
      */
@@ -421,10 +602,31 @@ class Html extends Markup
      *
      * @return Html instance
      */
-    public static function routeLink($text, $route, $parameters = [])
+    public static function routeLink($text, $route, $parameters = [], $link_attributes = [])
     {
-        return self::createElement('a')->text($text)
+        $element = self::createElement('a')->text($text)
             ->href(route($route, $parameters));
+
+        foreach ($link_attributes as $method_name => $value) {
+            if (method_exists($element, $method_name)) {
+                if (!is_array($value)) {
+                    $value = [$value];
+                }
+                $element->$method_name(...$value);
+            }
+        }
+
+        return $element;
+    }
+
+    /**
+     * Return string of this object.
+     *
+     * @return string
+     */
+    public function s($return_string = true)
+    {
+        return ($return_string) ? (string)$this : '';
     }
 
     /**
@@ -474,9 +676,16 @@ class Html extends Markup
      * @param string $value
      * @return Html instance
      */
-    public function style($value)
+    public function style($value, $replace = false)
     {
-        return parent::attr('style', $value);
+        if ($replace) {
+            return parent::attr('style', $value);
+        }
+        if (!isset($this->attributeList['style'])) {
+            $this->attributeList['style'] = '';
+        }
+        $this->attributeList['style'] .= $value;
+        return $this;
     }
 
     /**
@@ -552,6 +761,25 @@ class Html extends Markup
     public function value($value = '')
     {
         return parent::attr('value', htmlspecialchars($value));
+    }
+
+    /**
+     * Shortcut to set('value', $value).
+     *
+     * @param string $value
+     * @return Html instance
+     */
+    public function valueDate($value = '', $value_format = '', $setting_format = '')
+    {
+        if (is_object($value)) {
+            $value = $value->format($value_format);
+        } else {
+            $value = '';
+        }
+        if ($setting_format !== false) {
+            $this->data('datepicker-format', $setting_format);
+        }
+        return parent::attr('value', $value);
     }
 
     /**
