@@ -410,9 +410,9 @@ class Html extends Markup
      * @param string $value
      * @return Html instance
      */
-    public function openNew()
+    public function openNew($open_normally = false)
     {
-        if ($this->tag === 'a') {
+        if (!$open_normally && $this->tag === 'a') {
             return parent::attr('target', '_blank');
         }
         return $this;
@@ -602,10 +602,10 @@ class Html extends Markup
      *
      * @return Html instance
      */
-    public static function routeLink($text, $route, $parameters = [], $link_attributes = [])
+    public static function routeLink($text, $route, $parameters = [], $link_attributes = [], $extra_link = '')
     {
         $element = self::createElement('a')->text($text)
-            ->href(route($route, $parameters));
+            ->href(route($route, $parameters) . $extra_link);
 
         foreach ($link_attributes as $method_name => $value) {
             if (method_exists($element, $method_name)) {
