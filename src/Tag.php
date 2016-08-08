@@ -240,7 +240,7 @@ class Tag
         self::checkBuildOptions($options);
 
         $tag_is_special = in_array($tag_object->getTag(), self::$special_tags);
-        $tag_is_ignored = in_array($tag_object->getTag(), $options['ignore_tags']);
+        $tag_is_ignored = in_array($tag_object->getTag(), array_get($options, 'ignore_tags', []));
 
         $ignore_tag = true;
         if (!isset($options['ignore_tags']) || !$tag_is_ignored) {
