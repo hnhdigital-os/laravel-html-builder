@@ -138,10 +138,10 @@ class Html extends Markup
      *
      * @return Html instance
      */
-    public function autocomplete()
+    public function autocomplete($value = 'off')
     {
         if (in_array($this->tag, ['form', 'input'])) {
-            return parent::attr('autocomplete', 'autofocus');
+            return parent::attr('autocomplete', $value);
         }
         return $this;
     }
@@ -369,6 +369,17 @@ class Html extends Markup
 
         return $label->text($this)
             ->text($text);
+    }
+
+    /**
+     * Shortcut to set('lang', $value).
+     *
+     * @param string $value
+     * @return Html instance
+     */
+    public function lang($value)
+    {
+        return $this->set('lang', $value);
     }
 
     /**
