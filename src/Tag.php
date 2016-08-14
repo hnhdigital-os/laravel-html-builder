@@ -3,13 +3,12 @@
 namespace Bluora\LaravelHtmlBuilder;
 
 use Exception;
-use Bluora\LaravelHtmlBuilder\Html;
 
 class Tag
 {
     private static $tag_registry = [];
     private static $special_tags = [
-        'img', 'br', 'hr', 'input', 'area', 'link', 'meta', 'param'
+        'img', 'br', 'hr', 'input', 'area', 'link', 'meta', 'param',
     ];
 
     protected $tag = 'tag';
@@ -35,14 +34,15 @@ class Tag
     /**
      * Create a new tag object.
      *
-     * @param  string $tag
-     * @param  array  $attributes
-     * @param  string $text
+     * @param string $tag
+     * @param array  $attributes
+     * @param string $text
+     *
      * @return Bluora\LaravelHtmlBuilder\Tag
      */
     public static function create($tag, $attributes = [], $text = '')
     {
-        return (new Tag())->add($tag, $attributes, $text);
+        return (new self())->add($tag, $attributes, $text);
     }
 
     /**
@@ -51,6 +51,7 @@ class Tag
      * @param string $tag
      * @param array  $attributes
      * @param string $text
+     *
      * @return Bluora\LaravelHtmlBuilder\Tag
      */
     public function add($tag, $attributes = [], $text = '')
@@ -63,6 +64,7 @@ class Tag
                 $tag_object = Html::createElement($tag);
                 self::$tag_registry[] = &$tag_object;
                 $this->child_nodes[] = &$tag_object;
+
                 return $tag_object;
             } else {
                 $class_name = 'Bluora\\LaravelHtmlBuilder\\Tag\\'.ucfirst($tag);
@@ -71,13 +73,14 @@ class Tag
                     self::$tag_registry[] = &$tag_object;
                     $this->child_nodes[] = &$tag_object;
                     $tag_object->setParent($tag_object);
+
                     return $tag_object;
                 } else {
                     throw new Exception($tag.' does not exist.');
                 }
             }
         } else {
-            throw new Exception($this->tag . ' does permit '.$tag);
+            throw new Exception($this->tag.' does permit '.$tag);
         }
     }
 
@@ -91,7 +94,7 @@ class Tag
         if (!empty($this->parent_node)) {
             return $this->parent_node;
         } else {
-            throw new Exception($this->tag . ' has no parent.');
+            throw new Exception($this->tag.' has no parent.');
         }
     }
 
@@ -99,11 +102,13 @@ class Tag
      * Set the parent of this tag.
      *
      * @param LaravelHtmlBuilder\Tag $tag_object
+     *
      * @return Bluora\LaravelHtmlBuilder\Tag
      */
     public function setParent(&$tag_object)
     {
         $this->parent_node = &$tag_object;
+
         return $this;
     }
 
@@ -120,7 +125,8 @@ class Tag
     /**
      * Set the text for this tag.
      *
-     * @param  string $value
+     * @param string $value
+     *
      * @return Bluora\LaravelHtmlBuilder\Tag
      */
     public function setText($value)
@@ -128,6 +134,7 @@ class Tag
         if (!empty($value)) {
             $this->text = $value;
         }
+
         return $this;
     }
 
@@ -145,6 +152,7 @@ class Tag
      * Set one or many attributes.
      *
      * @param  array ...$attributes
+     *
      * @return Bluora\LaravelHtmlBuilder\Tag
      */
     public function setAttributes()
@@ -156,6 +164,7 @@ class Tag
             }
             $this->attributes = $attributes;
         }
+
         return $this;
     }
 
@@ -174,18 +183,21 @@ class Tag
      *
      * @param string $name
      * @param string $value
+     *
      * @return Bluora\LaravelHtmlBuilder\Tag
      */
     public function setAttribute($name, $value)
     {
         $this->attributes[$name] = $value;
+
         return $this;
     }
 
     /**
      * Get a single attribute value from this tag.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return string
      */
     public function getAttribute($name)
@@ -196,11 +208,11 @@ class Tag
     /**
      * Checks to see if this tag has child nodes.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasChildNodes()
     {
-        return (count($this->child_nodes) > 0);
+        return count($this->child_nodes) > 0;
     }
 
     /**
@@ -216,7 +228,8 @@ class Tag
     /**
      * Checks and defaults the options request for a build request.
      *
-     * @param  array &$options
+     * @param array &$options
+     *
      * @return void
      */
     private static function checkBuildOptions(&$options)
@@ -229,10 +242,11 @@ class Tag
     /**
      * Build html from this object.
      *
-     * @param  string  &$html
-     * @param  LaravelHtmlBuilder\Tag  $tag_object
-     * @param  array  $options
-     * @param  integer $tab
+     * @param string                 &$html
+     * @param LaravelHtmlBuilder\Tag $tag_object
+     * @param array                  $options
+     * @param int                    $tab
+     *
      * @return void
      */
     private static function buildHtml(&$html, $tag_object, $options, $tab = 0)
@@ -251,17 +265,17 @@ class Tag
 
         $pad = '';
         if ($tab > 0) {
-            $pad = str_pad($pad, $tab*2, ' ', STR_PAD_LEFT);
+            $pad = str_pad($pad, $tab * 2, ' ', STR_PAD_LEFT);
         }
 
         if (!$ignore_tag) {
             if ($tag_is_special) {
-                $html .= $pad.(string)$tag_object;
+                $html .= $pad.(string) $tag_object;
             } else {
                 $html .= $pad;
                 $html .= '<'.$tag_object->tag.''.self::buildHtmlAttribute($tag_object->getAttributes()).'>';
                 $html .= ($tag_object->use_whitespace) ? "\n" : '';
-                if (strlen($tag_object->getText()))  {
+                if (strlen($tag_object->getText())) {
                     $html .= ($tag_object->use_whitespace) ? $pad.'  ' : '';
                     $html .= $tag_object->getText();
                 }
@@ -271,7 +285,7 @@ class Tag
 
         if (!$tag_is_special && $tag_object->hasChildNodes()) {
             foreach ($tag_object->getChildNodes() as $child_tag_object) {
-                self::buildHtml($html, $child_tag_object, $options, $tab+1);
+                self::buildHtml($html, $child_tag_object, $options, $tab + 1);
             }
         }
 
@@ -284,7 +298,8 @@ class Tag
     /**
      * Build html attributes from array.
      *
-     * @param  array $attributes
+     * @param array $attributes
+     *
      * @return string
      */
     private static function buildHtmlAttribute($attributes)
@@ -302,15 +317,17 @@ class Tag
                 }
             }
         }
+
         return $html;
     }
 
     /**
      * Build an array from this object.
      *
-     * @param  array &$array
-     * @param  LaravelHtmlBuilder\Tag $tag_object
-     * @param  array $options
+     * @param array                  &$array
+     * @param LaravelHtmlBuilder\Tag $tag_object
+     * @param array                  $options
+     *
      * @return void
      */
     private static function buildArray(&$array, $tag_object, $options = [])
@@ -318,13 +335,13 @@ class Tag
         self::checkBuildOptions($options);
 
         if (in_array($tag_object->getTag(), self::$special_tags)) {
-            $array[] = [(string)$tag_object];
+            $array[] = [(string) $tag_object];
         } elseif (!isset($options['ignore_tags']) || !in_array($tag_object->getTag(), $options['ignore_tags'])) {
             $array[] = [
                 $tag_object->getTag(),
                 self::buildHtmlAttribute($tag_object->getAttributes()),
                 $tag_object->getText(),
-                []
+                [],
             ];
         }
         if ($tag_object->hasChildNodes()) {
@@ -333,11 +350,11 @@ class Tag
                     self::buildArray($array, $child_tag_object);
                 }
             } else {
-                $current_parent = count($array)-1;
+                $current_parent = count($array) - 1;
                 foreach ($tag_object->getChildNodes() as $child_tag_object) {
-                    $current_position = count($array)-1;
+                    $current_position = count($array) - 1;
                     if (isset($array[$current_position][3]) && !is_null($array[$current_position][3])) {
-                        self::buildArray($array[count($array)-1][3], $child_tag_object);
+                        self::buildArray($array[count($array) - 1][3], $child_tag_object);
                     }
                 }
             }
@@ -345,17 +362,19 @@ class Tag
     }
 
     /**
-     * Build html from an array
-     * @param  string  &$html
-     * @param  array  $array
-     * @param  integer $tab
+     * Build html from an array.
+     *
+     * @param string &$html
+     * @param array  $array
+     * @param int    $tab
+     *
      * @return void
      */
     public static function buildFromArray(&$html, $array, $tab = 0)
     {
         $pad = '';
         if ($tab > 0) {
-            $pad = str_pad($pad, $tab*2, ' ', STR_PAD_LEFT);
+            $pad = str_pad($pad, $tab * 2, ' ', STR_PAD_LEFT);
         }
 
         if (!empty($array[0])) {
@@ -372,7 +391,7 @@ class Tag
 
         if (isset($array[3]) && is_array($array[3])) {
             foreach ($array[3] as $child_array) {
-                self::buildFromArray($html, $child_array, $tab+1);
+                self::buildFromArray($html, $child_array, $tab + 1);
             }
         }
 
@@ -400,33 +419,38 @@ class Tag
     /**
      * Get html from this object.
      *
-     * @param  array  $options
+     * @param array $options
+     *
      * @return string
      */
     public function getHtml($options = [])
     {
         $html = '';
         self::buildHtml($html, $this, $options, 0);
+
         return $html;
     }
 
     /**
      * Get array from this object.
      *
-     * @param  array  $options
+     * @param array $options
+     *
      * @return string
      */
     public function getArray($options = [])
     {
         $array = [];
         self::buildArray($array, $this, $options);
+
         return $array;
     }
 
     /**
-     * Get json from this object (via $this->getArray)
+     * Get json from this object (via $this->getArray).
      *
-     * @param  array  $options
+     * @param array $options
+     *
      * @return string
      */
     public function getJson($options = [])
@@ -437,7 +461,8 @@ class Tag
     /**
      * Get Html from an array (that was originally generated from $this->getArray).
      *
-     * @param  array $array
+     * @param array $array
+     *
      * @return html
      */
     public static function getHtmlFromArray($array)
@@ -446,6 +471,7 @@ class Tag
         foreach ($array as $child_array) {
             self::buildFromArray($html, $child_array);
         }
+
         return $html;
     }
 
@@ -462,30 +488,34 @@ class Tag
     /**
      * Create a html tab object.
      *
-     * @param  string $tag
-     * @param  array $arguments
+     * @param string $tag
+     * @param array  $arguments
+     *
      * @return Bluora\LaravelHtmlBuilder\Tag $tag_object
      */
     public function __call($tag, $arguments)
     {
         if (in_array($tag, $this->allowed_tags) || in_array($tag, self::$special_tags)) {
             array_unshift($arguments, $tag);
+
             return call_user_func_array([$this, 'add'], $arguments);
         }
+
         return $this;
     }
 
     /**
      * Create a html tab object.
      *
-     * @param  string $tag
-     * @param  array $arguments
+     * @param string $tag
+     * @param array  $arguments
+     *
      * @return Bluora\LaravelHtmlBuilder\Tag $tag_object
      */
     public static function __callStatic($tag, $arguments)
     {
         array_unshift($arguments, $tag);
+
         return call_user_func_array(['self', 'create'], $arguments);
     }
-
 }

@@ -7,7 +7,7 @@ use HtmlGenerator\Markup;
 class Html extends Markup
 {
     protected $autocloseTagsList = [
-        'img', 'br', 'hr', 'input', 'area', 'link', 'meta', 'param'
+        'img', 'br', 'hr', 'input', 'area', 'link', 'meta', 'param',
     ];
     protected $tag = 'tag';
 
@@ -37,6 +37,7 @@ class Html extends Markup
      * Shortcut to set('alt', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function alt($value)
@@ -45,20 +46,21 @@ class Html extends Markup
     }
 
     /**
-     * Add an array of attributes
+     * Add an array of attributes.
      *
      * @param array $attribute_list
+     *
      * @return Html instance
      */
     public function addAttributes($attribute_list)
     {
-
     }
 
     /**
      * Add a class to classList.
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function addClass($value)
@@ -82,6 +84,7 @@ class Html extends Markup
                 $this->attributeList['class'][] = $class_name;
             }
         }
+
         return $this;
     }
 
@@ -89,6 +92,7 @@ class Html extends Markup
      * Shortcut to set('for', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function addFor($value)
@@ -97,7 +101,7 @@ class Html extends Markup
     }
 
     /**
-     * Create options
+     * Create options.
      */
     public function addOptionsArray($data, $data_value, $data_name, $selected_value = [])
     {
@@ -118,6 +122,7 @@ class Html extends Markup
                 $option->selected('selected');
             }
         }
+
         return $this;
     }
 
@@ -126,6 +131,7 @@ class Html extends Markup
      *
      * @param string $name
      * @param string $value
+     *
      * @return Html instance
      */
     public function aria($name, $value)
@@ -143,6 +149,7 @@ class Html extends Markup
         if (in_array($this->tag, ['form', 'input'])) {
             return parent::attr('autocomplete', $value);
         }
+
         return $this;
     }
 
@@ -156,14 +163,16 @@ class Html extends Markup
         if (in_array($this->tag, ['button', 'input', 'keygen', 'select', 'textarea'])) {
             return parent::attr('autofocus', 'autofocus');
         }
+
         return $this;
     }
 
     /**
      * Shortcut to set('checked', $value).
      *
-     * @param boolean $value
-     * @param boolean $check_value
+     * @param bool $value
+     * @param bool $check_value
+     *
      * @return Html instance
      */
     public function checked($value = true, $check_value = true)
@@ -171,6 +180,7 @@ class Html extends Markup
         if ($value === $check_value) {
             return parent::attr('checked', 'checked');
         }
+
         return $this;
     }
 
@@ -178,8 +188,9 @@ class Html extends Markup
      * Create a new tag.
      *
      * @param string $tag
-     * @param mixed $attributes1
-     * @param mixed $attributes2
+     * @param mixed  $attributes1
+     * @param mixed  $attributes2
+     *
      * @return Markup instance
      */
     public static function createElement($tag = '', $attributes1 = [], $attributes2 = [])
@@ -201,6 +212,7 @@ class Html extends Markup
                 }
             }
         }
+
         return $tag_object;
     }
 
@@ -209,6 +221,7 @@ class Html extends Markup
      *
      * @param string $name
      * @param string $value
+     *
      * @return Html instance
      */
     public function data($name, $value)
@@ -219,8 +232,9 @@ class Html extends Markup
     /**
      * Shortcut to set('disabled', $value).
      *
-     * @param boolean $value
-     * @param boolean $check_value
+     * @param bool $value
+     * @param bool $check_value
+     *
      * @return Html instance
      */
     public function disable($value = true, $check_value = true)
@@ -228,6 +242,7 @@ class Html extends Markup
         if ($value === $check_value) {
             return parent::attr('disabled', 'disabled');
         }
+
         return $this;
     }
 
@@ -235,6 +250,7 @@ class Html extends Markup
      * Shortcut to set('form', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function form($value)
@@ -243,28 +259,32 @@ class Html extends Markup
     }
 
     /**
-     * Shortcut to creating a FontAwesome item (static)
+     * Shortcut to creating a FontAwesome item (static).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public static function icon($icon, $size = 0, $tag = 'i')
     {
         $icon = ($icon[0] === '-') ? substr($icon, 1) : 'fa-'.$icon;
         $size = ($size > 0) ? ' fa-'.$size : '';
-        $fa = Html::$tag()->addClass('fa '.$icon.$size)->aria('hidden', 'true');
+        $fa = self::$tag()->addClass('fa '.$icon.$size)->aria('hidden', 'true');
+
         return $fa;
     }
 
     /**
-     * Shortcut to creating a FontAwesome item
+     * Shortcut to creating a FontAwesome item.
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function addicon($icon, $tag = 'i')
     {
         $icon = static::icon($icon, $tag);
+
         return $this->addElement($icon);
     }
 
@@ -281,19 +301,21 @@ class Html extends Markup
     /**
      * Shortcut to createElement('h'.$size, $text).
      *
-     * @param integer $size
+     * @param int    $size
      * @param string $text
+     *
      * @return Html instance
      */
     public static function h($size, $text)
     {
-        return Html::createElement('h'.$size, $text);
+        return self::createElement('h'.$size, $text);
     }
 
     /**
      * Shortcut to set('height', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function height($value)
@@ -305,6 +327,7 @@ class Html extends Markup
      * Shortcut to set('height', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function hidden()
@@ -313,6 +336,7 @@ class Html extends Markup
             $this->attributeList['style'] = '';
         }
         $this->attributeList['style'] .= 'display:hidden;';
+
         return $this;
     }
 
@@ -320,6 +344,7 @@ class Html extends Markup
      * Shortcut to set('href', $value). Only works with A tags.
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function href($value = '')
@@ -327,6 +352,7 @@ class Html extends Markup
         if ($this->tag === 'a') {
             return parent::attr('href', $value);
         }
+
         return $this;
     }
 
@@ -334,6 +360,7 @@ class Html extends Markup
      * Shortcut to set('id', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function id($value)
@@ -345,23 +372,26 @@ class Html extends Markup
      * Shortcut to set('href', 'javascript:void(0)').
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function scriptLink($value = 0)
     {
         $value = ($value !== 0) ? '\''.urlencode(htmlspecialchars($value)).'\'' : $value;
+
         return $this->set('href', 'javascript:void();');
     }
 
     /**
-     * Shortcut for creating a label
+     * Shortcut for creating a label.
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function label($text)
     {
-        $label = Html::createElement('label');
+        $label = self::createElement('label');
 
         if (isset($this->attributeList['id'])) {
             $label->refer($this->attributeList['id']);
@@ -375,6 +405,7 @@ class Html extends Markup
      * Shortcut to set('lang', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function lang($value)
@@ -387,18 +418,18 @@ class Html extends Markup
      *
      * @return Html instance
      */
-    public static function urlLink($text, $url, $parameters  = [], $secure = null)
+    public static function urlLink($text, $url, $parameters = [], $secure = null)
     {
         return $this->createElement('a')->text($text)
-            ->href(url($url, $parameters, $secure ));
+            ->href(url($url, $parameters, $secure));
     }
 
     /**
-     * Add an route link
+     * Add an route link.
      *
      * @return Html instance
      */
-    public function url($text, $url, $parameters  = [], $secure = null)
+    public function url($text, $url, $parameters = [], $secure = null)
     {
         return $this->add('a')->text($text)
             ->href(url($url, $parameters, $secure));
@@ -408,6 +439,7 @@ class Html extends Markup
      * Shortcut to set('name', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function name($value)
@@ -419,6 +451,7 @@ class Html extends Markup
      * Shortcut to set('target', '_blank').
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function openNew($open_normally = false)
@@ -426,6 +459,7 @@ class Html extends Markup
         if (!$open_normally && $this->tag === 'a') {
             return parent::attr('target', '_blank');
         }
+
         return $this;
     }
 
@@ -434,6 +468,7 @@ class Html extends Markup
      *
      * @param string $name
      * @param string $value
+     *
      * @return Html instance
      */
     public function on($name, $value)
@@ -445,6 +480,7 @@ class Html extends Markup
      * Shortcut to set('style', 'opacity: xx').
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function opacity($value)
@@ -452,7 +488,8 @@ class Html extends Markup
         if (!isset($this->attributeList['style'])) {
             $this->attributeList['style'] = '';
         }
-        $this->attributeList['style'] .= 'opacity: '.round($value/100, 2).';';
+        $this->attributeList['style'] .= 'opacity: '.round($value / 100, 2).';';
+
         return $this;
     }
 
@@ -460,6 +497,7 @@ class Html extends Markup
      * Shortcut to set('pattern', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function pattern($value)
@@ -471,6 +509,7 @@ class Html extends Markup
      * Shortcut to set('placeholder', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function placeholder($value)
@@ -479,17 +518,21 @@ class Html extends Markup
     }
 
     /**
-     * Prepare key => value options array for select-options
+     * Prepare key => value options array for select-options.
      *
      * @param array $options
+     *
      * @return Html instance
      */
     public static function prepareOptions($options, $blank_first_option = false)
     {
-        $options = array_map(function($key, $value) {
+        $options = array_map(function ($key, $value) {
             return [$key, $value];
         }, array_keys($options), array_values($options));
-        if ($blank_first_option) array_unshift($options, ['', '']);
+        if ($blank_first_option) {
+            array_unshift($options, ['', '']);
+        }
+
         return $options;
     }
 
@@ -497,6 +540,7 @@ class Html extends Markup
      * Shortcut to set('multiple', 'multiple').
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function multiple()
@@ -508,6 +552,7 @@ class Html extends Markup
      * Remove a class from classList.
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function removeClass($value)
@@ -515,14 +560,16 @@ class Html extends Markup
         if (!is_null($this->attributeList['class'])) {
             unset($this->attributeList['class'][array_search($value, $this->attributeList['class'])]);
         }
+
         return $this;
     }
 
     /**
      * Shortcut to set('required', $value).
      *
-     * @param boolean $required
-     * @param boolean $required_value
+     * @param bool $required
+     * @param bool $required_value
+     *
      * @return Html instance
      */
     public function required($required = true, $required_value = true)
@@ -530,8 +577,10 @@ class Html extends Markup
         if ($required == $required_value) {
             $this->addClass('required');
             $this->aria('required', 'true');
+
             return parent::attr('required', 'required');
         }
+
         return $this;
     }
 
@@ -539,6 +588,7 @@ class Html extends Markup
      * Shortcut to set('role', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function role($value)
@@ -549,7 +599,8 @@ class Html extends Markup
     /**
      * Shortcut to set('rows', $value).
      *
-     * @param integer $rows
+     * @param int $rows
+     *
      * @return Html instance
      */
     public function rows($rows)
@@ -557,6 +608,7 @@ class Html extends Markup
         if ($this->tag === 'textarea') {
             return parent::attr('rows', $rows);
         }
+
         return $this;
     }
 
@@ -583,8 +635,10 @@ class Html extends Markup
 
     /**
      * Shortcut to set('selected', 'selected').
-     *s
+     *s.
+     *
      * @param string $value
+     *
      * @return Html instance
      */
     public function rtl($is_rtl = false)
@@ -594,13 +648,16 @@ class Html extends Markup
         } else {
             parent::attr('dir', 'ltr');
         }
+
         return $this;
     }
 
     /**
      * Shortcut to set('selected', 'selected').
-     *s
+     *s.
+     *
      * @param string $value
+     *
      * @return Html instance
      */
     public function selected()
@@ -616,7 +673,7 @@ class Html extends Markup
     public static function routeLink($text, $route, $parameters = [], $link_attributes = [], $extra_link = '')
     {
         $element = self::createElement('a')->text($text)
-            ->href(route($route, $parameters) . $extra_link);
+            ->href(route($route, $parameters).$extra_link);
 
         foreach ($link_attributes as $method_name => $value) {
             if (method_exists($element, $method_name)) {
@@ -637,7 +694,7 @@ class Html extends Markup
      */
     public function s($return_string = true)
     {
-        return ($return_string) ? (string)$this : '';
+        return ($return_string) ? (string) $this : '';
     }
 
     /**
@@ -645,6 +702,7 @@ class Html extends Markup
      *
      * @param string $name
      * @param string $value
+     *
      * @return Markup instance
      */
     public function set($name, $value)
@@ -653,6 +711,7 @@ class Html extends Markup
             $value = htmlspecialchars($value);
         }
         parent::set($name, $value);
+
         return $this;
     }
 
@@ -664,6 +723,7 @@ class Html extends Markup
     public function setTag($tag)
     {
         $this->tag = $tag;
+
         return $this;
     }
 
@@ -671,6 +731,7 @@ class Html extends Markup
      * Shortcut to set('src', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function src($value)
@@ -678,6 +739,7 @@ class Html extends Markup
         if ($this->tag === 'img') {
             return parent::attr('src', $value);
         }
+
         return $this;
     }
 
@@ -685,6 +747,7 @@ class Html extends Markup
      * Shortcut to set('style', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function style($value, $replace = false)
@@ -696,6 +759,7 @@ class Html extends Markup
             $this->attributeList['style'] = '';
         }
         $this->attributeList['style'] .= $value;
+
         return $this;
     }
 
@@ -703,6 +767,7 @@ class Html extends Markup
      * Shortcut to set('target', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function target($value)
@@ -714,6 +779,7 @@ class Html extends Markup
      * Define text content.
      *
      * @param string $value
+     *
      * @return Markup instance
      */
     public function text($value)
@@ -722,6 +788,7 @@ class Html extends Markup
             $value = htmlspecialchars($value);
         }
         parent::text($value);
+
         return $this;
     }
 
@@ -729,6 +796,7 @@ class Html extends Markup
      * Shortcut to set('title', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function title($value)
@@ -740,6 +808,7 @@ class Html extends Markup
      * Shortcut to set('type', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function type($value)
@@ -749,6 +818,7 @@ class Html extends Markup
                 $this->value(1);
                 break;
         }
+
         return parent::attr('type', $value);
     }
 
@@ -756,6 +826,7 @@ class Html extends Markup
      * Shortcut to set('width', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function width($value)
@@ -767,6 +838,7 @@ class Html extends Markup
      * Shortcut to set('value', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function value($value = '')
@@ -778,6 +850,7 @@ class Html extends Markup
      * Shortcut to set('value', $value).
      *
      * @param string $value
+     *
      * @return Html instance
      */
     public function valueDate($value = '', $value_format = '', $setting_format = '')
@@ -790,33 +863,37 @@ class Html extends Markup
         if ($setting_format !== false) {
             $this->data('datepicker-format', $setting_format);
         }
+
         return parent::attr('value', $value);
     }
 
     /**
-     * Add a new element
+     * Add a new element.
      *
-     * @param  string $tag
-     * @param  array $arguments
+     * @param string $tag
+     * @param array  $arguments
+     *
      * @return Html instance
      */
     public function __call($tag, $arguments)
     {
         array_unshift($arguments, $tag);
+
         return call_user_func_array([$this, 'addElement'], $arguments);
     }
 
     /**
-     * Create a new element
+     * Create a new element.
      *
-     * @param  string $tag
-     * @param  array $arguments
+     * @param string $tag
+     * @param array  $arguments
+     *
      * @return Html instance
      */
     public static function __callStatic($tag, $arguments)
     {
         array_unshift($arguments, $tag);
+
         return call_user_func_array(['self', 'createElement'], $arguments);
     }
-
 }
