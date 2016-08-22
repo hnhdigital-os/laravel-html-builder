@@ -436,6 +436,22 @@ class Html extends Markup
     }
 
     /**
+     * Shortcut to set('maxlength', $value).
+     *
+     * @param integer $value
+     *
+     * @return Html instance
+     */
+    public function maxlength($value)
+    {
+        if ($this->tag === 'input') {
+            return parent::attr('maxlength', $value);
+        }
+
+        return $this;
+    }
+
+    /**
      * Shortcut to set('name', $value).
      *
      * @param string $value
@@ -521,16 +537,18 @@ class Html extends Markup
      * Prepare key => value options array for select-options.
      *
      * @param array $options
+     * @param boolean $blank_first_option
+     * @param string $value_first_option
      *
      * @return Html instance
      */
-    public static function prepareOptions($options, $blank_first_option = false)
+    public static function prepareOptions($options, $blank_first_option = false, $value_first_option = '')
     {
         $options = array_map(function ($key, $value) {
             return [$key, $value];
         }, array_keys($options), array_values($options));
         if ($blank_first_option) {
-            array_unshift($options, ['', '']);
+            array_unshift($options, [$value_first_option, '']);
         }
 
         return $options;
@@ -843,7 +861,7 @@ class Html extends Markup
      */
     public function value($value = '')
     {
-        return parent::attr('value', htmlspecialchars($value));
+        return parent::attr('value', $value);
     }
 
     /**
