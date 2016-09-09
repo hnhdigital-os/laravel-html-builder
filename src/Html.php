@@ -460,7 +460,7 @@ class Html extends Markup
     /**
      * Shortcut to set('maxlength', $value).
      *
-     * @param integer $value
+     * @param int $value
      *
      * @return Html instance
      */
@@ -558,8 +558,8 @@ class Html extends Markup
     /**
      * Prepare key => value options array for select-options.
      *
-     * @param array $options
-     * @param boolean $blank_first_option
+     * @param array  $options
+     * @param bool   $blank_first_option
      * @param string $value_first_option
      *
      * @return Html instance
