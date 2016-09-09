@@ -12,6 +12,18 @@ class Html extends Markup
     protected $tag = 'tag';
 
     /**
+     * Shortcut to set('action', $url).
+     *
+     * @param string $value
+     *
+     * @return Html instance
+     */
+    public function addAction($url)
+    {
+        return parent::attr('action', $url);
+    }
+
+    /**
      * Add an action link.
      *
      * @return Html instance
@@ -256,6 +268,16 @@ class Html extends Markup
     public function form($value)
     {
         return parent::attr('form', $value);
+    }
+
+    /**
+     * Shortcut to set('download', $value).
+     *
+     * @return Html instance
+     */
+    public function download($value)
+    {
+        return parent::attr('download', $value);
     }
 
     /**
@@ -552,6 +574,18 @@ class Html extends Markup
         }
 
         return $options;
+    }
+
+    /**
+     * Shortcut to set('method', $value).
+     *
+     * @param string $value
+     *
+     * @return Html instance
+     */
+    public function method($value = 'POST')
+    {
+        return parent::attr('method', $value);
     }
 
     /**
