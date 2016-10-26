@@ -21,17 +21,6 @@ class Tag
     protected $use_whitespace = true;
 
     /**
-     * Create a tag instance.
-     *
-     * @return void
-     */
-    public function __construct($attributes = [], $text = '')
-    {
-        $this->setAttributes($attributes);
-        $this->setText($text);
-    }
-
-    /**
      * Create a new tag object.
      *
      * @param string $tag
@@ -64,10 +53,10 @@ class Tag
 
             // Tag belongs to the special tags list.
             if (in_array($tag, self::$special_tags)) {
-                $tag_object = Html::createElement($tag);
+                $tag_object = Html::createElement($tag, $text, $attributes);
+                $tag_object->text($text)->addAttributes($attributes);
                 self::$tag_registry[] = &$tag_object;
                 $this->child_nodes[] = &$tag_object;
-
                 return $tag_object;
             }
 
@@ -99,9 +88,9 @@ class Tag
     {
         if (!empty($this->parent_node)) {
             return $this->parent_node;
-        } else {
-            throw new \Exception($this->tag.' has no parent.');
         }
+
+        throw new \Exception($this->tag.' has no parent.');
     }
 
     /**
@@ -114,6 +103,22 @@ class Tag
     public function setParent(&$tag_object)
     {
         $this->parent_node = &$tag_object;
+
+        return $this;
+    }
+
+    /**
+     * Set the tag name.
+     *
+     * @return Bluora\LaravelHtmlBuilder\Tag
+     */
+    public function setTag($tag)
+    {
+        if (in_array($this->tag, self::$special_tags)) {
+            throw new \Exception($this->tag.' can be changed.');
+        }
+
+        $this->tag = $tag;
 
         return $this;
     }
@@ -276,7 +281,7 @@ class Tag
 
         if (!$ignore_tag) {
             if ($tag_is_special) {
-                $html .= $pad.(string) $tag_object;
+                $html .= $pad.trim((string) $tag_object)."\n";
             } else {
                 $html .= $pad;
                 $html .= '<'.$tag_object->tag.''.self::buildHtmlAttribute($tag_object->getAttributes()).'>';
@@ -293,6 +298,11 @@ class Tag
             foreach ($tag_object->getChildNodes() as $child_tag_object) {
                 self::buildHtml($html, $child_tag_object, $options, $tab + 1);
             }
+        }
+
+        $pad = '';
+        if ($tab > 0) {
+            $pad = str_pad($pad, $tab * 2, ' ', STR_PAD_LEFT);
         }
 
         if (!$ignore_tag && !$tag_is_special) {
