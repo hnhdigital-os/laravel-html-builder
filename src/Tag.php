@@ -2,7 +2,6 @@
 
 namespace Bluora\LaravelHtmlBuilder;
 
-use Exception;
 use Bluora\LaravelHtmlGenerator\Html;
 
 class Tag
@@ -77,11 +76,11 @@ class Tag
 
                     return $tag_object;
                 } else {
-                    throw new Exception($tag.' does not exist.');
+                    throw new \Exception($tag.' does not exist.');
                 }
             }
         } else {
-            throw new Exception($this->tag.' does permit '.$tag);
+            throw new \Exception($this->tag.' does permit '.$tag);
         }
     }
 
@@ -95,7 +94,7 @@ class Tag
         if (!empty($this->parent_node)) {
             return $this->parent_node;
         } else {
-            throw new Exception($this->tag.' has no parent.');
+            throw new \Exception($this->tag.' has no parent.');
         }
     }
 
