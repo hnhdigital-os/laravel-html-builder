@@ -21,6 +21,8 @@ engines:
         enabled: false
       Design/NpathComplexity:
         enabled: false
+      Design/WeightedMethodCount:
+        enabled: false
 ratings:
   paths:
   - "**.php"
