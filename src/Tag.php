@@ -3,6 +3,7 @@
 namespace Bluora\LaravelHtmlBuilder;
 
 use Exception;
+use Bluora\LaravelHtmlGenerator\Html;
 
 class Tag
 {
