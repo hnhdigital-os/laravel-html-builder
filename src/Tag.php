@@ -289,7 +289,7 @@ class Tag
             }
         }
 
-        if (!$ignore_tag &&  !$tag_is_special) {
+        if (!$ignore_tag && !$tag_is_special) {
             $html .= ($tag_object->use_whitespace) ? $pad : '';
             $html .= '</'.$tag_object->tag.'>'."\n";
         }
