@@ -282,7 +282,7 @@ class Tag
         if (!$ignore_tag) {
             if ($tag_is_special) {
                 $html .= $pad.trim((string) $tag_object)."\n";
-            } else {
+            } elseif (!$tag_is_special) {
                 $html .= $pad;
                 $html .= '<'.$tag_object->tag.''.self::buildHtmlAttribute($tag_object->getAttributes()).'>';
                 $html .= ($tag_object->use_whitespace) ? "\n" : '';
@@ -371,7 +371,6 @@ class Tag
                 return;
             }
 
-            $current_parent = count($array) - 1;
             foreach ($tag_object->getChildNodes() as $child_tag_object) {
                 $current_position = count($array) - 1;
                 if (isset($array[$current_position][3]) && !is_null($array[$current_position][3])) {
@@ -432,9 +431,9 @@ class Tag
     {
         if (request()->ajax()) {
             return $this->getArray($options);
-        } else {
-            return $this->getHtml($options);
         }
+
+        return $this->getHtml($options);
     }
 
     /**
