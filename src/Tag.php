@@ -57,31 +57,37 @@ class Tag
     public function add($tag, $attributes = [], $text = '')
     {
         $tag = strtolower($tag);
-        if ($this->tag === 'tag' || in_array($tag, $this->allowed_tags) || in_array($tag, self::$special_tags)) {
-            $index = count($this->child_nodes);
 
+        if ($this->tag === 'tag'
+            || in_array($tag, $this->allowed_tags)
+            || in_array($tag, self::$special_tags)) {
+
+            // Tag belongs to the special tags list.
             if (in_array($tag, self::$special_tags)) {
                 $tag_object = Html::createElement($tag);
                 self::$tag_registry[] = &$tag_object;
                 $this->child_nodes[] = &$tag_object;
 
                 return $tag_object;
-            } else {
-                $class_name = 'Bluora\\LaravelHtmlBuilder\\Tag\\'.ucfirst($tag);
-                if (class_exists($class_name)) {
-                    $tag_object = new $class_name($attributes, $text);
-                    self::$tag_registry[] = &$tag_object;
-                    $this->child_nodes[] = &$tag_object;
-                    $tag_object->setParent($tag_object);
-
-                    return $tag_object;
-                } else {
-                    throw new \Exception($tag.' does not exist.');
-                }
             }
-        } else {
-            throw new \Exception($this->tag.' does permit '.$tag);
+
+            // Create the class name for this tag
+            $class_name = 'Bluora\\LaravelHtmlBuilder\\Tag\\'.ucfirst($tag);
+
+            // If the tag exists, otherwise we throw an exception.
+            if (class_exists($class_name)) {
+                $tag_object = new $class_name($attributes, $text);
+                self::$tag_registry[] = &$tag_object;
+                $this->child_nodes[] = &$tag_object;
+                $tag_object->setParent($tag_object);
+
+                return $tag_object;
+            }
+
+            throw new \Exception($tag.' does not exist.');
         }
+        
+        throw new \Exception($this->tag.' does permit '.$tag);
     }
 
     /**
@@ -344,20 +350,25 @@ class Tag
                 [],
             ];
         }
+
         if ($tag_object->hasChildNodes()) {
+
             if (isset($options['ignore_tags']) && in_array($tag_object->getTag(), $options['ignore_tags'])) {
                 foreach ($tag_object->getChildNodes() as $child_tag_object) {
                     self::buildArray($array, $child_tag_object);
                 }
-            } else {
-                $current_parent = count($array) - 1;
-                foreach ($tag_object->getChildNodes() as $child_tag_object) {
-                    $current_position = count($array) - 1;
-                    if (isset($array[$current_position][3]) && !is_null($array[$current_position][3])) {
-                        self::buildArray($array[count($array) - 1][3], $child_tag_object);
-                    }
+
+                return;
+            }
+
+            $current_parent = count($array) - 1;
+            foreach ($tag_object->getChildNodes() as $child_tag_object) {
+                $current_position = count($array) - 1;
+                if (isset($array[$current_position][3]) && !is_null($array[$current_position][3])) {
+                    self::buildArray($array[count($array) - 1][3], $child_tag_object);
                 }
             }
+
         }
     }
 
