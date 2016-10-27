@@ -1,0 +1,19 @@
+<?php
+
+class FakeRequest
+{
+    public $ajax = false;
+
+    public function ajax()
+    {
+        return $this->ajax;
+    }
+}
+
+$request_object = new FakeRequest();
+
+function request()
+{
+    global $request_object;
+    return $request_object;
+}

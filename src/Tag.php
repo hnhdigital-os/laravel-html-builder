@@ -86,11 +86,7 @@ class Tag
      */
     public function getParent()
     {
-        if (!empty($this->parent_node)) {
-            return $this->parent_node;
-        }
-
-        throw new \Exception($this->tag.' has no parent.');
+        return $this->parent_node;
     }
 
     /**
@@ -114,8 +110,8 @@ class Tag
      */
     public function setTag($tag)
     {
-        if (in_array($this->tag, self::$special_tags)) {
-            throw new \Exception($this->tag.' can be changed.');
+        if (in_array($tag, $this->getParent()->allowed_tags)) {
+            throw new \Exception($tag.' can not be changed as it is not allowed under '.$this->getParent()->getTag().'.');
         }
 
         $this->tag = $tag;
@@ -511,7 +507,7 @@ class Tag
      * @param string $tag
      * @param array  $arguments
      *
-     * @return Bluora\LaravelHtmlBuilder\Tag $tag_object
+     * @return mixed
      */
     public function __call($tag, $arguments)
     {
@@ -520,8 +516,8 @@ class Tag
 
             return call_user_func_array([$this, 'add'], $arguments);
         }
-
-        return $this;
+        
+        throw new \Exception($this->tag.' does permit '.$tag);
     }
 
     /**
