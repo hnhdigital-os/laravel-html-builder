@@ -58,6 +58,7 @@ class Tag
                 $tag_object->text($text)->addAttributes($attributes);
                 self::$tag_registry[] = &$tag_object;
                 $this->child_nodes[] = &$tag_object;
+
                 return $tag_object;
             }
 
@@ -78,7 +79,7 @@ class Tag
 
             throw new \Exception($tag.' does not exist.');
         }
-        
+
         throw new \Exception($this->tag.' does permit '.$tag);
     }
 
@@ -359,7 +360,6 @@ class Tag
         }
 
         if ($tag_object->hasChildNodes()) {
-
             if (isset($options['ignore_tags']) && in_array($tag_object->getTag(), $options['ignore_tags'])) {
                 foreach ($tag_object->getChildNodes() as $child_tag_object) {
                     self::buildArray($array, $child_tag_object);
@@ -374,7 +374,6 @@ class Tag
                     self::buildArray($array[count($array) - 1][3], $child_tag_object);
                 }
             }
-
         }
     }
 
@@ -396,6 +395,7 @@ class Tag
 
         if (!isset($array[1])) {
             $html .= $array[0]."\n";
+
             return;
         }
 
@@ -519,9 +519,10 @@ class Tag
     {
         if (empty($this->allowed_tags) || in_array($tag, $this->allowed_tags) || in_array($tag, self::$special_tags)) {
             array_unshift($arguments, $tag);
+
             return $this->add(...$arguments);
         }
-        
+
         throw new \Exception($this->tag.' does permit '.$tag);
     }
 
