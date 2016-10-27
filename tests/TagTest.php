@@ -147,7 +147,8 @@ class TagTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetText()
     {
-        $label = Tag::label([], 'Test');
-        $this->assertEquals(trim((string)$label), "<label>\n  Test\n</label>");
+        $label = Tag::label();
+        $label->div([], 'Test');
+        $this->assertEquals(trim((string)$label), "<label>\n  <div>\n    Test\n  </div>\n</label>");
     }
 }

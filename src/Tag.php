@@ -48,6 +48,7 @@ class Tag
         $tag = strtolower($tag);
 
         if ($this->tag === 'tag'
+            || empty($this->allowed_tags)
             || in_array($tag, $this->allowed_tags)
             || in_array($tag, self::$special_tags)) {
 
@@ -511,10 +512,9 @@ class Tag
      */
     public function __call($tag, $arguments)
     {
-        if (in_array($tag, $this->allowed_tags) || in_array($tag, self::$special_tags)) {
+        if (empty($this->allowed_tags) || in_array($tag, $this->allowed_tags) || in_array($tag, self::$special_tags)) {
             array_unshift($arguments, $tag);
-
-            return call_user_func_array([$this, 'add'], $arguments);
+            return $this->add(...$arguments);
         }
         
         throw new \Exception($this->tag.' does permit '.$tag);
