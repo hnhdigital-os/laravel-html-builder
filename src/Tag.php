@@ -65,7 +65,9 @@ class Tag
 
             // If the tag exists, otherwise we throw an exception.
             if (class_exists($class_name)) {
-                $tag_object = new $class_name($attributes, $text);
+                $tag_object = (new $class_name())
+                    ->setAttributes($attributes)
+                    ->setText($text);
                 self::$tag_registry[] = &$tag_object;
                 $this->child_nodes[] = &$tag_object;
                 $tag_object->setParent($tag_object);
@@ -138,9 +140,7 @@ class Tag
      */
     public function setText($value)
     {
-        if (!empty($value)) {
-            $this->text = $value;
-        }
+        $this->text = $value;
 
         return $this;
     }

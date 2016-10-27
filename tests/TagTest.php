@@ -137,5 +137,17 @@ class TagTest extends \PHPUnit_Framework_TestCase
 
         $array_output = [['label', '', '', []]];
         $this->assertEquals($label->prepare(),$array_output);
+
+        $html_output = Tag::getHtmlFromArray($array_output);
+        $this->assertEquals(trim($html_output), "<label>\n</label>");
+    }
+
+    /**
+     * Assert that we get html or json.
+     */
+    public function testSetText()
+    {
+        $label = Tag::label([], 'Test');
+        $this->assertEquals(trim((string)$label), "<label>\n  Test\n</label>");
     }
 }
