@@ -348,7 +348,7 @@ class Tag
         self::checkBuildOptions($options);
 
         if (in_array($tag_object->getTag(), self::$special_tags)) {
-            $array[] = [(string) $tag_object];
+            $array[] = [trim((string) $tag_object)];
         } elseif (!isset($options['ignore_tags']) || !in_array($tag_object->getTag(), $options['ignore_tags'])) {
             $array[] = [
                 $tag_object->getTag(),
@@ -392,6 +392,11 @@ class Tag
         $pad = '';
         if ($tab > 0) {
             $pad = str_pad($pad, $tab * 2, ' ', STR_PAD_LEFT);
+        }
+
+        if (!isset($array[1])) {
+            $html .= $array[0]."\n";
+            return;
         }
 
         if (!empty($array[0])) {

@@ -3,8 +3,9 @@
 namespace Bluora\LaravelHtmlBuilder\Tests;
 
 use Bluora\LaravelHtmlBuilder\Tag;
+use PHPUnit\Framework\TestCase;
 
-class TagTest extends \PHPUnit_Framework_TestCase
+class TagTest extends TestCase
 {
     /**
      * Assert that created object creates the correct output.
@@ -30,8 +31,8 @@ class TagTest extends \PHPUnit_Framework_TestCase
         $input = Tag::input(['value' => 'test']);
         $this->assertEquals(trim((string)$input), "<input value=\"test\"/>");
 
-        $input = Tag::input(['value' => 'test'], 'test');
-        $this->assertEquals(trim((string)$input), "<input value=\"test\"/>");
+        $input = Tag::input(['class' => 'input'], 'test');
+        $this->assertEquals(trim((string)$input), "<input class=\"input\"/>");
     }
 
     /**
@@ -55,7 +56,9 @@ class TagTest extends \PHPUnit_Framework_TestCase
 
         $label->input(['value' => 'test']);
         $this->assertEquals(trim((string)$label), "<label title=\"Click me\">\n  <input value=\"test\"/>\n</label>");
-        $this->assertEquals($label->getJson(), '[["label"," title=\"Click me\"","",[["<input value=\"test\"\/>\r\n\t"]]]]');
+        $this->assertEquals($label->getJson(), '[["label"," title=\"Click me\"","",[["<input value=\"test\"\/>"]]]]');
+
+        $this->assertEquals($label->getJson(['ignore_tags' => 'label']), '[["<input value=\"test\"\/>"]]');
     }
 
     /**
@@ -132,14 +135,15 @@ class TagTest extends \PHPUnit_Framework_TestCase
         $label = Tag::label();
         $this->assertEquals(trim($label->prepare()), "<label>\n</label>");
 
-        $label = Tag::label();
+        $label = Tag::label(['title' => 'Click me']);
+        $label->input(['value' => 'test']);
         request()->ajax = true;
 
-        $array_output = [['label', '', '', []]];
-        $this->assertEquals($label->prepare(),$array_output);
+        $array_output = [["label"," title=\"Click me\"","",[["<input value=\"test\"/>"]]]];
+        $this->assertEquals($label->prepare(), $array_output);
 
         $html_output = Tag::getHtmlFromArray($array_output);
-        $this->assertEquals(trim($html_output), "<label>\n</label>");
+        $this->assertEquals(trim($html_output), "<label title=\"Click me\">\n<input value=\"test\"/>\n</label>");
     }
 
     /**

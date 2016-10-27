@@ -17,3 +17,8 @@ function request()
     global $request_object;
     return $request_object;
 }
+
+function hookAddClassHtmlTag($class_name)
+{
+
+}
