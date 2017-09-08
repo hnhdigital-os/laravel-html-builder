@@ -18,7 +18,7 @@
         "illuminate/support": "^5.3"
     },
     "support": {
-        "issues": "https://github.com/bluora/laravel-html-builder/issues"
+        "issues": "https://github.com/hnhdigital-os/laravel-html-builder/issues"
     },
     "autoload": {
         "psr-4": {
