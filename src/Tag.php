@@ -160,7 +160,7 @@ class Tag
     /**
      * Set one or many attributes.
      *
-     * @param  array ...$attributes
+     * @param array ...$attributes
      *
      * @return Bluora\LaravelHtmlBuilder\Tag
      */
