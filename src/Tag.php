@@ -52,7 +52,7 @@ class Tag
             if (array_has($arguments, $i)) {
                 if (is_array(array_get($arguments, $i))) {
                     $attributes = array_get($arguments, $i);
-                } elseif (is_string(array_get($arguments, $i))) {
+                } elseif (is_string(array_get($arguments, $i)) || is_object(array_get($arguments, $i))) {
                     $text = array_get($arguments, $i);
                 }
             }
@@ -154,6 +154,11 @@ class Tag
     public function setText($value)
     {
         $this->text = $value;
+
+        // Auto-convert into html.
+        if (is_object($value) && stripos(get_class($value), 'HtmlGenerator\\Html')) {
+            $this->text = (string) $value;
+        }
 
         return $this;
     }
