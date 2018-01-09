@@ -38,14 +38,25 @@ class Tag
      * Add a child node to this tag.
      *
      * @param string $tag
-     * @param array  $attributes
-     * @param string $text
+     * @param array  $arguments
      *
      * @return Bluora\LaravelHtmlBuilder\Tag
      */
-    public function add($tag, $attributes = [], $text = '')
+    public function add($tag, ...$arguments)
     {
         $tag = strtolower($tag);
+        $text = '';
+        $attributes = [];
+
+        for ($i = 0; $i <= 1; $i++) {
+            if (array_has($arguments, $i)) {
+                if (is_array(array_get($arguments, $i))) {
+                    $attributes = array_get($arguments, $i);
+                } elseif (is_string(array_get($arguments, $i))) {
+                    $text = array_get($arguments, $i);
+                }
+            }
+        }
 
         if ($this->tag === 'tag'
             || empty($this->allowed_tags)
