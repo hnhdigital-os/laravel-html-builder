@@ -22,3 +22,8 @@ function request()
 function hookAddClassHtmlTag($class_name)
 {
 }
+
+function config($key, $default)
+{
+    return $default;
+}

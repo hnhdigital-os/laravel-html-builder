@@ -1,8 +1,8 @@
 <?php
 
-namespace Bluora\LaravelHtmlBuilder\Tag;
+namespace HnhDigital\LaravelHtmlBuilder\Tag;
 
-use Bluora\LaravelHtmlBuilder\Tag;
+use HnhDigital\LaravelHtmlBuilder\Tag;
 
 class Td extends Tag
 {

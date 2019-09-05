@@ -1,14 +1,15 @@
+php:
+  - 7.2
+  - 7.3
+  - 7.4snapshot
+language: php
 before_script:
   - composer self-update
   - composer install --prefer-dist --no-interaction
-php:
-  - 5.6
-  - 7.0
-  - hhvm
-language: php
-matrix: 
-  allow_failures: 
-  - php: hhvm
-addons:
-    code_climate:
-        repo_token: f412e5c9c924671b48523887c3520aff8c443be23efe1eb65dd84fec6d610b76
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+after_script:
+  - ./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT
+allowed_failures:
+  - 7.4snapshot

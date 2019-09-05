@@ -1,8 +1,9 @@
 <?php
 
-namespace Bluora\LaravelHtmlBuilder;
+namespace HnhDigital\LaravelHtmlBuilder;
 
-use Bluora\LaravelHtmlGenerator\Html;
+use Illuminate\Support\Arr;
+use HnhDigital\LaravelHtmlGenerator\Html;
 
 class Tag
 {
@@ -27,7 +28,7 @@ class Tag
      * @param array  $attributes
      * @param string $text
      *
-     * @return Bluora\LaravelHtmlBuilder\Tag
+     * @return self
      */
     public static function create($tag, $attributes = [], $text = '')
     {
@@ -40,7 +41,7 @@ class Tag
      * @param string $tag
      * @param array  $arguments
      *
-     * @return Bluora\LaravelHtmlBuilder\Tag
+     * @return self
      */
     public function add($tag, ...$arguments)
     {
@@ -49,11 +50,11 @@ class Tag
         $attributes = [];
 
         for ($i = 0; $i <= 1; $i++) {
-            if (array_has($arguments, $i)) {
-                if (is_array(array_get($arguments, $i))) {
-                    $attributes = array_get($arguments, $i);
-                } elseif (is_string(array_get($arguments, $i)) || is_object(array_get($arguments, $i))) {
-                    $text = array_get($arguments, $i);
+            if (Arr::has($arguments, $i)) {
+                if (is_array(Arr::get($arguments, $i))) {
+                    $attributes = Arr::get($arguments, $i);
+                } elseif (is_string(Arr::get($arguments, $i)) || is_object(Arr::get($arguments, $i))) {
+                    $text = Arr::get($arguments, $i);
                 }
             }
         }
@@ -62,10 +63,9 @@ class Tag
             || empty($this->allowed_tags)
             || in_array($tag, $this->allowed_tags)
             || in_array($tag, self::$special_tags)) {
-
             // Tag belongs to the special tags list.
             if (in_array($tag, self::$special_tags)) {
-                $tag_object = Html::createElement($tag, $text, $attributes);
+                $tag_object = Html::createElement($tag);
                 $tag_object->text($text)->addAttributes($attributes);
                 self::$tag_registry[] = &$tag_object;
                 $this->child_nodes[] = &$tag_object;
@@ -74,7 +74,7 @@ class Tag
             }
 
             // Create the class name for this tag
-            $class_name = 'Bluora\\LaravelHtmlBuilder\\Tag\\'.ucfirst($tag);
+            $class_name = 'HnhDigital\\LaravelHtmlBuilder\\Tag\\'.ucfirst($tag);
 
             // If the tag exists, otherwise we throw an exception.
             if (class_exists($class_name)) {
@@ -97,7 +97,7 @@ class Tag
     /**
      * Get the tag parent node.
      *
-     * @return Bluora\LaravelHtmlBuilder\Tag
+     * @return self
      */
     public function getParent()
     {
@@ -109,7 +109,7 @@ class Tag
      *
      * @param LaravelHtmlBuilder\Tag $tag_object
      *
-     * @return Bluora\LaravelHtmlBuilder\Tag
+     * @return self
      */
     public function setParent(&$tag_object)
     {
@@ -121,12 +121,14 @@ class Tag
     /**
      * Set the tag name.
      *
-     * @return Bluora\LaravelHtmlBuilder\Tag
+     * @return self
      */
     public function setTag($tag)
     {
         if (in_array($tag, $this->getParent()->allowed_tags)) {
-            throw new \Exception($tag.' can not be changed as it is not allowed under '.$this->getParent()->getTag().'.');
+            throw new \Exception(
+                $tag.' can not be changed as it is not allowed under '.$this->getParent()->getTag().'.'
+            );
         }
 
         $this->tag = $tag;
@@ -149,7 +151,7 @@ class Tag
      *
      * @param string $value
      *
-     * @return Bluora\LaravelHtmlBuilder\Tag
+     * @return self
      */
     public function setText($value)
     {
@@ -178,7 +180,7 @@ class Tag
      *
      * @param array ...$attributes
      *
-     * @return Bluora\LaravelHtmlBuilder\Tag
+     * @return self
      */
     public function setAttributes()
     {
@@ -209,7 +211,7 @@ class Tag
      * @param string $name
      * @param string $value
      *
-     * @return Bluora\LaravelHtmlBuilder\Tag
+     * @return self
      */
     public function setAttribute($name, $value)
     {
@@ -279,7 +281,7 @@ class Tag
         self::checkBuildOptions($options);
 
         $tag_is_special = in_array($tag_object->getTag(), self::$special_tags);
-        $tag_is_ignored = in_array($tag_object->getTag(), array_get($options, 'ignore_tags', []));
+        $tag_is_ignored = in_array($tag_object->getTag(), Arr::get($options, 'ignore_tags', []));
 
         $ignore_tag = true;
         if (!isset($options['ignore_tags']) || !$tag_is_ignored) {
@@ -548,7 +550,7 @@ class Tag
      * @param string $tag
      * @param array  $arguments
      *
-     * @return Bluora\LaravelHtmlBuilder\Tag $tag_object
+     * @return self $tag_object
      */
     public static function __callStatic($tag, $arguments)
     {

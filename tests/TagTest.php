@@ -1,8 +1,8 @@
 <?php
 
-namespace Bluora\LaravelHtmlBuilder\Tests;
+namespace HnhDigital\LaravelHtmlBuilder\Tests;
 
-use Bluora\LaravelHtmlBuilder\Tag;
+use HnhDigital\LaravelHtmlBuilder\Tag;
 use PHPUnit\Framework\TestCase;
 
 class TagTest extends TestCase
@@ -63,43 +63,43 @@ class TagTest extends TestCase
 
     /**
      * Assert that creating an invalid tag throws an exception.
-     *
-     * @expectedException Exception
      */
     public function testAddExeptionForInvalidTag()
     {
+        $this->expectException(\Exception::class);
+
         $table = Tag::create('table1');
     }
 
     /**
      * Assert that adding an invalid tag to another tag throws an exception.
-     *
-     * @expectedException Exception
      */
     public function testAddExeptionForIncorrectTag()
     {
+        $this->expectException(\Exception::class);
+
         $table = Tag::table();
         $td = $table->add('td');
     }
 
     /**
      * Assert that adding an invalid tag to another tag throws an exception.
-     *
-     * @expectedException Exception
      */
     public function testAddExeptionForIncorrectTag1()
     {
+        $this->expectException(\Exception::class);
+
         $table = Tag::table();
         $td = $table->td();
     }
 
     /**
      * Assert that changing a tag on a special tag throws an exception.
-     *
-     * @expectedException Exception
      */
     public function testChangeTagException()
     {
+        $this->expectException(\Exception::class);
+
         $table = Tag::table();
         $tr = $table->tr();
         $th = $tr->setTag('th');
