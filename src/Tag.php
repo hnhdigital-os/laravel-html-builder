@@ -261,7 +261,7 @@ class Tag
      */
     private static function checkBuildOptions(&$options)
     {
-        if (isset($options['ignore_tags']) && !is_array($options['ignore_tags'])) {
+        if (isset($options['ignore_tags']) && ! is_array($options['ignore_tags'])) {
             $options['ignore_tags'] = [$options['ignore_tags']];
         }
     }
@@ -284,7 +284,7 @@ class Tag
         $tag_is_ignored = in_array($tag_object->getTag(), Arr::get($options, 'ignore_tags', []));
 
         $ignore_tag = true;
-        if (!isset($options['ignore_tags']) || !$tag_is_ignored) {
+        if (! isset($options['ignore_tags']) || ! $tag_is_ignored) {
             $ignore_tag = false;
         } elseif (isset($options['ignore_tags']) && $tag_is_ignored) {
             $tab--;
@@ -295,10 +295,10 @@ class Tag
             $pad = str_pad($pad, $tab * 2, ' ', STR_PAD_LEFT);
         }
 
-        if (!$ignore_tag) {
+        if (! $ignore_tag) {
             if ($tag_is_special) {
                 $html .= $pad.trim((string) $tag_object)."\n";
-            } elseif (!$tag_is_special) {
+            } elseif (! $tag_is_special) {
                 $html .= $pad;
                 $html .= '<'.$tag_object->tag.''.self::buildHtmlAttribute($tag_object->getAttributes()).'>';
                 $html .= ($tag_object->use_whitespace) ? "\n" : '';
@@ -310,7 +310,7 @@ class Tag
             }
         }
 
-        if (!$tag_is_special && $tag_object->hasChildNodes()) {
+        if (! $tag_is_special && $tag_object->hasChildNodes()) {
             foreach ($tag_object->getChildNodes() as $child_tag_object) {
                 self::buildHtml($html, $child_tag_object, $options, $tab + 1);
             }
@@ -321,7 +321,7 @@ class Tag
             $pad = str_pad($pad, $tab * 2, ' ', STR_PAD_LEFT);
         }
 
-        if (!$ignore_tag && !$tag_is_special) {
+        if (! $ignore_tag && ! $tag_is_special) {
             $html .= ($tag_object->use_whitespace) ? $pad : '';
             $html .= '</'.$tag_object->tag.'>'."\n";
         }
@@ -368,7 +368,7 @@ class Tag
 
         if (in_array($tag_object->getTag(), self::$special_tags)) {
             $array[] = [trim((string) $tag_object)];
-        } elseif (!isset($options['ignore_tags']) || !in_array($tag_object->getTag(), $options['ignore_tags'])) {
+        } elseif (! isset($options['ignore_tags']) || ! in_array($tag_object->getTag(), $options['ignore_tags'])) {
             $array[] = [
                 $tag_object->getTag(),
                 self::buildHtmlAttribute($tag_object->getAttributes()),
@@ -388,7 +388,7 @@ class Tag
 
             foreach ($tag_object->getChildNodes() as $child_tag_object) {
                 $current_position = count($array) - 1;
-                if (isset($array[$current_position][3]) && !is_null($array[$current_position][3])) {
+                if (isset($array[$current_position][3]) && ! is_null($array[$current_position][3])) {
                     self::buildArray($array[count($array) - 1][3], $child_tag_object);
                 }
             }
@@ -411,19 +411,19 @@ class Tag
             $pad = str_pad($pad, $tab * 2, ' ', STR_PAD_LEFT);
         }
 
-        if (!isset($array[1])) {
+        if (! isset($array[1])) {
             $html .= $array[0]."\n";
 
             return;
         }
 
-        if (!empty($array[0])) {
+        if (! empty($array[0])) {
             $html .= $pad;
             $html .= '<'.$array[0].$array[1].'>';
             $html .= "\n";
         }
 
-        if (!empty($array[2])) {
+        if (! empty($array[2])) {
             $html .= $pad.'  ';
             $html .= $array[2];
             $html .= "\n";
@@ -435,7 +435,7 @@ class Tag
             }
         }
 
-        if (!empty($array[0])) {
+        if (! empty($array[0])) {
             $html .= $pad;
             $html .= '</'.$array[0].'>';
             $html .= "\n";
