@@ -2,8 +2,8 @@
 
 namespace HnhDigital\LaravelHtmlBuilder\Tests;
 
-use HnhDigital\LaravelHtmlBuilder\Tag;
 use PHPUnit\Framework\TestCase;
+use HnhDigital\LaravelHtmlBuilder\Tag;
 
 class TagTest extends TestCase
 {
