@@ -338,6 +338,9 @@ class Tag
     {
         $html = '';
         foreach ($attributes as $name => $value) {
+            if (is_array($value)) {
+                $value = implode(' ', $value);
+            }
             $html .= ' '.$name.'="'.$value.'"';
             $class_list = explode(' ', $value);
             foreach ($class_list as $class_name) {
