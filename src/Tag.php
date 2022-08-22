@@ -5,6 +5,15 @@ namespace HnhDigital\LaravelHtmlBuilder;
 use Illuminate\Support\Arr;
 use HnhDigital\LaravelHtmlGenerator\Html;
 
+/**
+ * @method static div(...$arguments)
+ * @method static label(...$arguments)
+ * @method static table(...$arguments)
+ * @method static tbody(...$arguments)
+ * @method static td(...$arguments)
+ * @method static tr(...$arguments)
+ * @mixin Tag
+ */
 class Tag
 {
     private static $tag_registry = [];
