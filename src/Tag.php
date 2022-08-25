@@ -2,8 +2,8 @@
 
 namespace HnhDigital\LaravelHtmlBuilder;
 
-use Illuminate\Support\Arr;
 use HnhDigital\LaravelHtmlGenerator\Html;
+use Illuminate\Support\Arr;
 
 /**
  * @method static div(...$arguments)
@@ -33,10 +33,9 @@ class Tag
     /**
      * Create a new tag object.
      *
-     * @param string $tag
-     * @param array  $attributes
-     * @param string $text
-     *
+     * @param  string  $tag
+     * @param  array  $attributes
+     * @param  string  $text
      * @return self
      */
     public static function create($tag, $attributes = [], $text = '')
@@ -47,9 +46,8 @@ class Tag
     /**
      * Add a child node to this tag.
      *
-     * @param string $tag
-     * @param array  $arguments
-     *
+     * @param  string  $tag
+     * @param  array  $arguments
      * @return self
      */
     public function add($tag, ...$arguments)
@@ -116,8 +114,7 @@ class Tag
     /**
      * Set the parent of this tag.
      *
-     * @param LaravelHtmlBuilder\Tag $tag_object
-     *
+     * @param  LaravelHtmlBuilder\Tag  $tag_object
      * @return self
      */
     public function setParent(&$tag_object)
@@ -158,8 +155,7 @@ class Tag
     /**
      * Set the text for this tag.
      *
-     * @param string $value
-     *
+     * @param  string  $value
      * @return self
      */
     public function setText($value)
@@ -187,8 +183,7 @@ class Tag
     /**
      * Set one or many attributes.
      *
-     * @param array ...$attributes
-     *
+     * @param  array  ...$attributes
      * @return self
      */
     public function setAttributes()
@@ -217,9 +212,8 @@ class Tag
     /**
      * Set a single attribute for this tag.
      *
-     * @param string $name
-     * @param string $value
-     *
+     * @param  string  $name
+     * @param  string  $value
      * @return self
      */
     public function setAttribute($name, $value)
@@ -232,8 +226,7 @@ class Tag
     /**
      * Get a single attribute value from this tag.
      *
-     * @param string $name
-     *
+     * @param  string  $name
      * @return string
      */
     public function getAttribute($name)
@@ -264,8 +257,7 @@ class Tag
     /**
      * Checks and defaults the options request for a build request.
      *
-     * @param array &$options
-     *
+     * @param  array  &$options
      * @return void
      */
     private static function checkBuildOptions(&$options)
@@ -278,11 +270,10 @@ class Tag
     /**
      * Build html from this object.
      *
-     * @param string                 &$html
-     * @param LaravelHtmlBuilder\Tag $tag_object
-     * @param array                  $options
-     * @param int                    $tab
-     *
+     * @param  string  &$html
+     * @param  LaravelHtmlBuilder\Tag  $tag_object
+     * @param  array  $options
+     * @param  int  $tab
      * @return void
      */
     private static function buildHtml(&$html, $tag_object, $options, $tab = 0)
@@ -339,8 +330,7 @@ class Tag
     /**
      * Build html attributes from array.
      *
-     * @param array $attributes
-     *
+     * @param  array  $attributes
      * @return string
      */
     private static function buildHtmlAttribute($attributes)
@@ -368,10 +358,9 @@ class Tag
     /**
      * Build an array from this object.
      *
-     * @param array                  &$array
-     * @param LaravelHtmlBuilder\Tag $tag_object
-     * @param array                  $options
-     *
+     * @param  array  &$array
+     * @param  LaravelHtmlBuilder\Tag  $tag_object
+     * @param  array  $options
      * @return void
      */
     private static function buildArray(&$array, $tag_object, $options = [])
@@ -410,10 +399,9 @@ class Tag
     /**
      * Build html from an array.
      *
-     * @param string &$html
-     * @param array  $array
-     * @param int    $tab
-     *
+     * @param  string  &$html
+     * @param  array  $array
+     * @param  int  $tab
      * @return void
      */
     public static function buildFromArray(&$html, $array, $tab = 0)
@@ -471,8 +459,7 @@ class Tag
     /**
      * Get html from this object.
      *
-     * @param array $options
-     *
+     * @param  array  $options
      * @return string
      */
     public function getHtml($options = [])
@@ -486,8 +473,7 @@ class Tag
     /**
      * Get array from this object.
      *
-     * @param array $options
-     *
+     * @param  array  $options
      * @return string
      */
     public function getArray($options = [])
@@ -501,8 +487,7 @@ class Tag
     /**
      * Get json from this object (via $this->getArray).
      *
-     * @param array $options
-     *
+     * @param  array  $options
      * @return string
      */
     public function getJson($options = [])
@@ -513,8 +498,7 @@ class Tag
     /**
      * Get Html from an array (that was originally generated from $this->getArray).
      *
-     * @param array $array
-     *
+     * @param  array  $array
      * @return html
      */
     public static function getHtmlFromArray($array)
@@ -540,9 +524,8 @@ class Tag
     /**
      * Create a html tab object.
      *
-     * @param string $tag
-     * @param array  $arguments
-     *
+     * @param  string  $tag
+     * @param  array  $arguments
      * @return mixed
      */
     public function __call($tag, $arguments)
@@ -559,9 +542,8 @@ class Tag
     /**
      * Create a html tab object.
      *
-     * @param string $tag
-     * @param array  $arguments
-     *
+     * @param  string  $tag
+     * @param  array  $arguments
      * @return self $tag_object
      */
     public static function __callStatic($tag, $arguments)
