@@ -16,6 +16,7 @@ use Illuminate\Support\Arr;
  * @method static th(...$arguments)
  * @method static td(...$arguments)
  * @method static tr(...$arguments)
+ *
  * @mixin Tag
  */
 class Tag
