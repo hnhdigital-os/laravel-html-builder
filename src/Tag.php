@@ -6,16 +6,17 @@ use HnhDigital\LaravelHtmlGenerator\Html;
 use Illuminate\Support\Arr;
 
 /**
- * @method static p(...$arguments)
- * @method static div(...$arguments)
- * @method static span(...$arguments)
- * @method static label(...$arguments)
- * @method static table(...$arguments)
- * @method static thead(...$arguments)
- * @method static tbody(...$arguments)
- * @method static th(...$arguments)
- * @method static td(...$arguments)
- * @method static tr(...$arguments)
+ * @method static p()
+ * @method static div()
+ * @method static span()
+ * @method static label()
+ * @method static table()
+ * @method static thead()
+ * @method static tbody()
+ * @method static th()
+ * @method static td()
+ * @method static tr()
+ *
  * @mixin Tag
  */
 class Tag
@@ -541,56 +542,6 @@ class Tag
         }
 
         throw new \Exception($this->tag.' does permit '.$tag);
-    }
-
-    public static function p(...$arguments)
-    {
-        return self::create('p', ...$arguments);
-    }
-
-    public static function div(...$arguments)
-    {
-        return self::create('div', ...$arguments);
-    }
-
-    public static function span(...$arguments)
-    {
-        return self::create('span', ...$arguments);
-    }
-
-    public static function label(...$arguments)
-    {
-        return self::create('label', ...$arguments);
-    }
-
-    public static function table(...$arguments)
-    {
-        return self::create('table', ...$arguments);
-    }
-
-    public static function thead(...$arguments)
-    {
-        return self::create('thead', ...$arguments);
-    }
-
-    public static function tbody(...$arguments)
-    {
-        return self::create('tbody', ...$arguments);
-    }
-
-    public static function th(...$arguments)
-    {
-        return self::create('th', ...$arguments);
-    }
-
-    public static function tr(...$arguments)
-    {
-        return self::create('tr', ...$arguments);
-    }
-
-    public static function td(...$arguments)
-    {
-        return self::create('td', ...$arguments);
     }
 
     /**
