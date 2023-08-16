@@ -6,16 +6,16 @@ use HnhDigital\LaravelHtmlGenerator\Html;
 use Illuminate\Support\Arr;
 
 /**
- * @method static p()
- * @method static div()
- * @method static span()
- * @method static label()
- * @method static table()
- * @method static thead()
- * @method static tbody()
- * @method static th()
- * @method static td()
- * @method static tr()
+ * @method static p(...$attributes)
+ * @method static div(...$attributes)
+ * @method static span(...$attributes)
+ * @method static label(...$attributes)
+ * @method static table(...$attributes)
+ * @method static thead(...$attributes)
+ * @method static tbody(...$attributes)
+ * @method static th(...$attributes)
+ * @method static td(...$attributes)
+ * @method static tr(...$attributes)
  *
  * @mixin Tag
  */
