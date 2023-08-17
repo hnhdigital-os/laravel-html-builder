@@ -555,6 +555,6 @@ class Tag
     {
         array_unshift($arguments, $tag);
 
-        return call_user_func_array(['self', 'create'], $arguments);
+        return call_user_func_array([Tag::class, 'create'], $arguments);
     }
 }
